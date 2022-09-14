@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define TAM 500
+#define TAM 500000
 
 void merge(int a[], int esq, int meio, int dir) {
     int i, j, k;
@@ -24,8 +24,7 @@ void merge(int a[], int esq, int meio, int dir) {
     }
 }
 
-double mergeAlg(int a[], int esq, int dir) {
-    clock_t inicio = clock();
+void mergeAlg(int a[], int esq, int dir) {
 
     if (esq < dir) {
         int meio = (esq + dir) / 2;
@@ -33,14 +32,16 @@ double mergeAlg(int a[], int esq, int dir) {
         mergeAlg(a, meio +1, dir);
         merge(a, esq, meio, dir);
     }
+}
+
+double mergeSort(int vetor[], int tam){
+    clock_t inicio = clock();
+
+    mergeAlg(vetor, 0, tam - 1);
 
     double tempo = (double) (clock() - inicio) / CLOCKS_PER_SEC;
 
     return tempo;
-}
-
-double mergeSort(int vetor[], int tam){
-    return mergeAlg(vetor, 0, tam - 1);
 }
 
 int main(){
@@ -50,17 +51,7 @@ int main(){
         vetor[i] = cont;
     }
 
-    printf("Vetor Original\n");
+    double tempo = mergeSort(vetor,TAM);
 
-    for (int i = 0; i < TAM; i++){
-        printf("%d\t", vetor[i]);
-    }
-
-    mergeSort(vetor,TAM);
-
-    printf("\nVetor Ordenado\n");
-
-    for (int i = 0; i < TAM; i++){
-        printf("%d\t", vetor[i]);
-    }
+    printf("\nVetor Ordenado em %.8f\n", tempo);
 }

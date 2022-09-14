@@ -79,6 +79,10 @@ pTAlgoritmo criarStruct(){
     pTA->insertSort = NULL;
     pTA->selectSort = NULL;
     pTA->shellSort  = NULL;
+    pTA->quickSortHoare  = NULL;
+    pTA->quickSortLomuto  = NULL;
+    pTA->mergeSort  = NULL;
+    pTA->radixSort  = NULL;
 
     return pTA;
 }
@@ -201,8 +205,44 @@ void tabDraw (pTAlgoritmo pTA){
         printf("%.2lfs", pTA->shellSort->ordenado);
         gotoxy(CINV+1,6);//linha 6 coluna INVERTIDO
         printf("%.2lfs", pTA->shellSort->invertido);
-        gotoxy(CALT,6);//linha 6 coluna ALEATORIO //! tirei o CALT+1
+        gotoxy(CALT,6);//linha 6 coluna ALEATORIO 
         printf("%.2lfs", pTA->shellSort->aleatorio);
+    }
+
+    if(pTA->quickSortHoare != NULL){    
+        gotoxy(CORD+1,7);//linha 7 coluna ORDENADO
+        printf("%.2lfs", pTA->quickSortHoare->ordenado);
+        gotoxy(CINV+1,7);//linha 7 coluna INVERTIDO
+        printf("%.2lfs", pTA->quickSortHoare->invertido);
+        gotoxy(CALT,7);//linha 7 coluna ALEATORIO 
+        printf("%.2lfs", pTA->quickSortHoare->aleatorio);
+    }
+
+    if(pTA->quickSortLomuto != NULL){    
+        gotoxy(CORD+1,8);//linha 8 coluna ORDENADO
+        printf("%.2lfs", pTA->quickSortLomuto->ordenado);
+        gotoxy(CINV+1,8);//linha 8 coluna INVERTIDO
+        printf("%.2lfs", pTA->quickSortLomuto->invertido);
+        gotoxy(CALT,8);//linha 8 coluna ALEATORIO 
+        printf("%.2lfs", pTA->quickSortLomuto->aleatorio);
+    }
+
+    if(pTA->mergeSort != NULL){    
+        gotoxy(CORD+1,9);//linha 9 coluna ORDENADO
+        printf("%.2lfs", pTA->mergeSort->ordenado);
+        gotoxy(CINV+1,9);//linha 9 coluna INVERTIDO
+        printf("%.2lfs", pTA->mergeSort->invertido);
+        gotoxy(CALT,9);//linha 9 coluna ALEATORIO 
+        printf("%.2lfs", pTA->mergeSort->aleatorio);
+    }
+
+    if(pTA->radixSort != NULL){    
+        gotoxy(CORD+1,10);//linha 10 coluna ORDENADO
+        printf("%.2lfs", pTA->radixSort->ordenado);
+        gotoxy(CINV+1,10);//linha 10 coluna INVERTIDO
+        printf("%.2lfs", pTA->radixSort->invertido);
+        gotoxy(CALT,10);//linha 10 coluna ALEATORIO 
+        printf("%.2lfs", pTA->radixSort->aleatorio);
     }
 
     gotoxy(5,14);
@@ -360,8 +400,7 @@ void merge(int a[], int esq, int meio, int dir) {
     }
 }
 
-double mergeAlg(int a[], int esq, int dir) {
-    clock_t inicio = clock();
+void mergeAlg(int a[], int esq, int dir) {
 
     if (esq < dir) {
         int meio = (esq + dir) / 2;
@@ -369,14 +408,16 @@ double mergeAlg(int a[], int esq, int dir) {
         mergeAlg(a, meio +1, dir);
         merge(a, esq, meio, dir);
     }
+}
+
+double mergeSort(int vetor[], int tam){
+    clock_t inicio = clock();
+
+    mergeAlg(vetor, 0, tam - 1);
 
     double tempo = (double) (clock() - inicio) / CLOCKS_PER_SEC;
 
     return tempo;
-}
-
-double mergeSort(int vetor[], int tam){
-    return mergeAlg(vetor, 0, tam - 1);
 }
 /** 
    *? =================================================================================ARQUIVOS=======================================================================
