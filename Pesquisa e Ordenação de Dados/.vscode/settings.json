@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "1_criarlista.h": "c",
-        "utils.h": "c",
-        "pilha.h": "c",
-        "lista.h": "c"
-    }
-}
