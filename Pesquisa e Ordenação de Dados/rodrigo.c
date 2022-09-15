@@ -9,14 +9,47 @@
     (faça isso por meio do incremento/decremento de uma variável do tipo inteira). Lembre-se de contar quantos carros foram atendidos também. 
     Nesse momento você já deve se preocupar com o controle de quanto combustível está sendo vendido e quanto restará nos tanques.
 
-    *? struct e considerado variavel global?
+    * * para fazer a entrega 4 devemos utilizar o while dentro de menuEscolha pra poder ter acesso aos dados sem a struct
+    *TODO Entrega 4
+    * ? struct e considerado variavel global?
 
+    *TODO Entrega 5
+    *? oque pode ser entregue? ele considera as funcoes feitas ate agora como essa entrega?
 
     *TODO Entrega 6
-    *TODO quais informacoes do carro devem conter em TCarro
+    *? quais informacoes do carro devem conter em TCarro
 */
 
+struct TPosto{
+    int maxFila;
+    float valorGasolina;
+    float qtdGasTanque;
+    int filaCarro;
+    float totalVenda;
+    int carrosAtendidos;
+};
 
+struct TCarro{
+    int atendido;
+    float litroAbastecimento;
+};
+
+typedef struct TPosto Posto;
+
+typedef struct TCarro Carro;
+
+Posto criarPosto(){
+    Posto p;
+
+    p.maxFila = 40;
+    p.valorGasolina = 0;
+    p.qtdGasTanque = 500;
+    p.filaCarro = 0;
+    p.totalVenda = 0;
+    p.carrosAtendidos = 0;
+
+    return p;
+}
 
 float abastecimento(float valorGasolina){
     int quantidade;
@@ -27,7 +60,7 @@ float abastecimento(float valorGasolina){
     return valorGasolina * quantidade;
 }
 
-char subMenu(){
+char subMenu(Posto posto){
 
     system("cls");    
     char opcoes;
@@ -45,19 +78,24 @@ char subMenu(){
 
     switch(opcoes){
         case 'a':
-            printf("Quantidade de litros vendida");
+            printf("Quantidade de litros vendida\n\n");
+            printf("Foram vendidos %.2f litros", (posto.qtdGasTanque - 500));
             break;
         case 'b':
-            printf("Valor total arrecadado com as vendas");
+            printf("Valor total arrecadado com as vendas\n\n");
+            printf("Valor total: R$%.2f", posto.totalVenda);
             break;
         case 'c':
-            printf("Quantidade de carros atendidos");
+            printf("Quantidade de carros atendidos\n\n");
+            printf("Carros atendidos: %d", posto.carrosAtendidos);
             break;
         case 'd':
-            printf("Quantidade de combustível restante no tanque");
+            printf("Quantidade de combustível restante no tanque\n\n");
+            printf("Resta %.2f litros no tanque", posto.qtdGasTanque);
             break;
         case 'e':
-            printf("Voce gerou arquivos para impressão");
+            printf("Voce gerou arquivos para impressão\n\n");
+            //Implementar depois
             break;
         case 'f':
             return opcoes;
@@ -74,58 +112,65 @@ char subMenu(){
     return opcoes;
 }
 
-int menuEscolha(int maxFila, int filaCarro, float valorGasolina){
-    system("cls");
+Posto menuEscolha(Posto posto){
     int opcoes;
 
-    printf("1- Adicionar um carro na fila\n");
-    printf("2- Abastecimento\n");
-    printf("3- Exibir carros na fila de espera\n");
-    printf("4- Relatórios\n");
-    printf("5- Encerrar\n");
+    while(opcoes!=5){
+        system("cls");
 
-    opcoes=getch();
-    system("cls");
+        printf("1- Adicionar um carro na fila\n");
+        printf("2- Abastecimento\n");
+        printf("3- Exibir carros na fila de espera\n");
+        printf("4- Relatórios\n");
+        printf("5- Encerrar\n");
 
-    switch(opcoes){
-        case '1':
-            printf("Carro adicionado");
-            filaCarro++;
-            if(filaCarro > maxFila){
-                system("cls");
-                printf("O valor nao pode ser maior que %d\n", maxFila);
-            }
-            break;
-        case '2':
-            printf("Voce selecionou Abastecimento\n");
-            if(filaCarro>0){
-                printf("\n\nValor total R$%.2f", abastecimento(valorGasolina));
-            }else{
-                printf("\n\nNao ha carros na fila para ser abastecido");
-            }
-            break;
-        case '3':
-            printf("Voce selecionou Carros exibidos na fila");
-            break;
-        case '4':
-            printf("Voce Entrou em Relatorios");
-            while(subMenu()!='f');
-            return 0;
-            break;
-        case '5':
-            printf("Voce Encerrou o Programa!");
-            return 5;
-            break;
-        default:
-            printf("ERRO");
-            break;
-    } 
+        opcoes=getch();
+        system("cls");
 
-    printf("\n\nAperte qualquer tecla para voltar ao menu!");
-    getch();
-    system("cls");
+        switch(opcoes){
+            case '1':
+                printf("Carro adicionado");
+                posto.filaCarro++;
+                if(posto.filaCarro > posto.maxFila){
+                    system("cls");
+                    printf("O valor nao pode ser maior que %d\n", posto.maxFila);
+                }
+                break;
+            case '2':
+                printf("Voce selecionou Abastecimento\n");
+                if(posto.filaCarro>0){
+                    float valorTotal = abastecimento(posto.valorGasolina);
+                    printf("\n\nValor total R$%.2f", valorTotal);
+                    posto.filaCarro--;
+                    posto.carrosAtendidos++;
+                    posto.totalVenda += valorTotal;
+                    posto.qtdGasTanque -= (valorTotal/posto.valorGasolina);
+                }else{
+                    printf("\n\nNao ha carros na fila para ser abastecido");
+                }
+                break;
+            case '3':
+                printf("Voce selecionou Carros exibidos na fila\n\n");
+                printf("Ha %d carros na fila", posto.filaCarro);
+                break;
+            case '4':
+                printf("Voce Entrou em Relatorios");
+                while(subMenu(posto)!='f');
+                break;
+            case '5':
+                printf("Voce Encerrou o Programa!");
+                break;
+            default:
+                printf("ERRO");
+                break;
+        } 
 
-    return opcoes;
+        printf("\n\nAperte qualquer tecla para voltar ao menu!");
+        getch();
+        system("cls");
+
+    }
+    return posto;
 }
 
 void menuInicial(){
@@ -140,7 +185,7 @@ void menuInicial(){
 float lerValorGasolina(){
     float valorGasolina;
 
-    printf("\nDigite o Valor da Gasolina: ");
+    printf("Digite o Valor da Gasolina: ");
     scanf("%f",&valorGasolina);
 
     return valorGasolina;
@@ -160,23 +205,11 @@ int lerFilaCarro(int maxFila){
 }
 
 int main(){
-    struct posto{
-        int maxFila;
-        float valorGasolina;
-        int qtdGasTanque;
-    };
-
-    struct TCarro{
-        int atendido;
-        float litroAbastecimento;
-    };
-    
-    int maxFila = 40, filaCarro;
-    float valorGasolina;
+    Posto posto = criarPosto();
 
     setlocale(LC_ALL, "Portuguese");
     menuInicial();
-    valorGasolina = lerValorGasolina();
-    filaCarro = lerFilaCarro(maxFila);
-    while(menuEscolha(maxFila, filaCarro, valorGasolina)!=5);
+    posto.valorGasolina = lerValorGasolina();
+    posto.filaCarro = lerFilaCarro(posto.maxFila);
+    posto = menuEscolha(posto);
 }
