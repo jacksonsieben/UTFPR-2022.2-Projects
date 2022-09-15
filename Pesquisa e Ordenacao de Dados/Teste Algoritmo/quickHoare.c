@@ -114,10 +114,54 @@ void hoare(int vetor[], int esq, int dir){
 	}	
 }
 
+
+
+int partition(int a[], int low, int high)
+{
+    int pivot = a[low];
+    int i = low - 1;
+    int j = high + 1;
+    while (1)
+    {
+        do {
+            i++;
+        } while (a[i] < pivot);
+ 
+        do {
+            j--;
+        } while (a[j] > pivot);
+ 
+        if (i >= j) {
+            return j;
+        }
+ 
+        troca(a, i, j);
+    }
+}
+ 
+// Quicksort routine
+void quicksort(int a[], int low, int high)
+{
+    // base condition
+    if (low >= high) {
+        return;
+    }
+ 
+    // rearrange elements across pivot
+    int pivot = partition(a, low, high);
+ 
+    // recur on subarray containing elements that are less than the pivot
+    quicksort(a, low, pivot);
+ 
+    // recur on subarray containing elements that are more than the pivot
+    quicksort(a, pivot + 1, high);
+}
+
 double quickSortHoare(int vetor[], int tam){
 	clock_t inicio = clock();
 	
-	hoare(vetor, 0, tam -1);
+	//hoare(vetor, 0, tam -1);
+	quicksort(vetor, 0, tam -1);
 
 	double tempo = (double) (clock() - inicio) / CLOCKS_PER_SEC;
 
