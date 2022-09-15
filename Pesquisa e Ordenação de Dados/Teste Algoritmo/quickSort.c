@@ -44,11 +44,11 @@ int main(){
         vetor[i] = cont;
     }
 
-    printf("Vetor Original\n");
+    /*printf("Vetor Original\n");
 
     for (int i = 0; i < TAM; i++){
         printf("%d\t", vetor[i]);
-    }
+    }*/
 
     quick_sort(vetor, 0, TAM -1);
 

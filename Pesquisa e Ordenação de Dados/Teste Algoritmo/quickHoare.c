@@ -2,13 +2,17 @@
 #include <stdlib.h> // srand, rand
 #include <time.h> // time
 
-#define TAM 50000
-
-/*// função que realiza a troca entre dois elementos
-
+#define TAM 500000
+/*
+// função que realiza a troca entre dois elementos
+void troca(int vet[], int i, int j){
+	int aux = vet[i];
+	vet[i] = vet[j];
+	vet[j] = aux;
+}
 
 // particiona e retorna o índice do pivô
-int particiona(int vet[], int inicio, int fim)7
+int particiona(int vet[], int inicio, int fim)
 {
 	int pivo, pivo_indice, i;
 	
@@ -59,24 +63,20 @@ void quick_sort(int vet[], int inicio, int fim)
 	}
 }
 
-int main()
-{
-	// vetor que será ordenado
-	int vet[] = {25,40,55,20,44,35,38,99,10,65,50};
-	int tam_vet = sizeof(vet) / sizeof(int);
-	int i;
-	
-	// inicializa random seed
-	srand(time(NULL));
-	 
-	// chamada do quicksort
-	quick_sort(vet, 0, tam_vet - 1);
+int main(){
+    int *vetor = malloc(TAM * sizeof(int));
 
-	// mostra o vetor ordenado
-	for(i = 0; i < tam_vet; i++)
-		printf("%d ", vet[i]);
-	
-	return 0; 
+    for(int cont= TAM, i=0; cont>0; cont--, i++){//invertido
+        vetor[i] = cont;
+    }
+
+	quick_sort(vetor, 0, TAM);
+
+    printf("\nVetor Ordenado \n");
+
+	for (int i = 0; i < TAM; i++){
+        printf("%d\t", vetor[i]);
+    }
 }*/
 
 void troca(int vet[], int i, int j){
@@ -89,10 +89,12 @@ int particionaHoare(int vet[], int esq, int dir){
 	int x = vet[esq], up = dir, down = esq;
 	while(down < up){
 		while(vet[down] <= x && down < dir){
-			down++;
+			//down++;
+			down = down + 1;
 		}
 		while(vet[up] > x){
-			up--;
+			//up--;
+			up = up - 1;
 		}
 		if(down < up){
 			troca(vet, down, up);
@@ -109,7 +111,7 @@ void hoare(int vetor[], int esq, int dir){
 	int i;
 	if(dir > esq){
 		i = particionaHoare(vetor, esq, dir);
-		hoare(vetor, esq, i-1);
+		hoare(vetor, esq, i);
 		hoare(vetor, i+1, dir);
 	}	
 }
@@ -134,4 +136,5 @@ int main(){
 	double tempo = quickSortHoare(vetor, TAM);
 
     printf("\nVetor Ordenado em %.8f\n", tempo);
+
 }
