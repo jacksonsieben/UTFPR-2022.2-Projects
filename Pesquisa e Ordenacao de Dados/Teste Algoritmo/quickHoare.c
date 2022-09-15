@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <stdlib.h> // srand, rand
-#include <time.h> // time
+#include <stdlib.h>
+#include <time.h>
 
 #define TAM 50000
 
@@ -89,10 +89,10 @@ int particionaHoare(int vet[], int esq, int dir){
 	int x = vet[esq], up = dir, down = esq;
 	while(down < up){
 		while(vet[down] <= x && down < dir){
-			down++;
+			down = down + 1;
 		}
 		while(vet[up] > x){
-			up--;
+			up = up - 1;
 		}
 		if(down < up){
 			troca(vet, down, up);
@@ -114,15 +114,11 @@ void hoare(int vetor[], int esq, int dir){
 	}	
 }
 
-
-
-int partition(int a[], int low, int high)
-{
+int partition(int a[], int low, int high){
     int pivot = a[low];
     int i = low - 1;
     int j = high + 1;
-    while (1)
-    {
+    while (1){
         do {
             i++;
         } while (a[i] < pivot);
@@ -140,8 +136,7 @@ int partition(int a[], int low, int high)
 }
  
 // Quicksort routine
-void quicksort(int a[], int low, int high)
-{
+void quicksort(int a[], int low, int high){
     // base condition
     if (low >= high) {
         return;
@@ -160,8 +155,8 @@ void quicksort(int a[], int low, int high)
 double quickSortHoare(int vetor[], int tam){
 	clock_t inicio = clock();
 	
-	//hoare(vetor, 0, tam -1);
-	quicksort(vetor, 0, tam -1);
+	hoare(vetor, 0, tam-1);
+	//quicksort(vetor, 1, tam);
 
 	double tempo = (double) (clock() - inicio) / CLOCKS_PER_SEC;
 
