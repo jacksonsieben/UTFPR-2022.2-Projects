@@ -4,7 +4,7 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}\\**",
-                "C:\\Users\\jacks\\Documents\\Projetos\\UTFPR-2022.2-Projects\\Pesquisa e Ordenacao de Dados\\Teste Algoritmo"
+                "C:\\Users\\jacks\\Documents\\GitHub\\UTFPR-2022.2-Projects\\Pesquisa e Ordenacao de Dados\\Teste Algoritmo"
             ],
             "defines": [
                 "_DEBUG",
@@ -14,7 +14,7 @@
             "compilerPath": "C:\\MinGW\\bin\\gcc.exe",
             "cStandard": "gnu11",
             "cppStandard": "gnu++14",
-            "intelliSenseMode": "windows-gcc-x86"
+            "intelliSenseMode": "${default}"
         }
     ],
     "version": 4

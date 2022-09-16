@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define TAM 50000
+#define TAM 150000
 
 /*// função que realiza a troca entre dois elementos
 
@@ -85,8 +85,11 @@ void troca(int vet[], int i, int j){
 	vet[j] = aux;
 }
 
-int particionaHoare(int vet[], int esq, int dir){
-	int x = vet[esq], up = dir, down = esq;
+int particionaHoare(int *vet, int esq, int dir){
+	int x = vet[esq];
+	int up = dir;
+	int down = esq;
+
 	while(down < up){
 		while(vet[down] <= x && down < dir){
 			down = down + 1;
@@ -105,20 +108,41 @@ int particionaHoare(int vet[], int esq, int dir){
 	return up;
 }
 
-void hoare(int vetor[], int esq, int dir){
-	int i;
+void hoare(int vetor[], int tam){// pivo = x | i3 = esq | j3 = dir
+	int i, dir, esq;
 	if(dir > esq){
-		i = particionaHoare(vetor, esq, dir);
-		hoare(vetor, esq, i-1);
-		hoare(vetor, i+1, dir);
-	}	
+
+		int x = vetor[tam/2];
+		int up = dir - 1;
+		int down = esq;
+
+		while(down < up){
+			while(vetor[down] <= x && down < dir){
+				down++;
+			}
+			while(vetor[up] > x){
+				up--;
+			}
+			if(down < up){
+				troca(vetor, down, up);
+			}
+		}
+
+		vetor[esq] = vetor[up];
+		vetor[up] = x;
+
+
+		//i = particionaHoare(vetor, esq, dir);
+		hoare(vetor, esq);
+		hoare(vetor + esq, tam - esq);
+	}
 }
 
 int partition(int a[], int low, int high){
     int pivot = a[low];
     int i = low - 1;
     int j = high + 1;
-    while (1){
+    while (i >= j){
         do {
             i++;
         } while (a[i] < pivot);
@@ -127,35 +151,42 @@ int partition(int a[], int low, int high){
             j--;
         } while (a[j] > pivot);
  
-        if (i >= j) {
+        /*if (i >= j) {
             return j;
-        }
+        }*/
  
         troca(a, i, j);
     }
+
+	return j;
 }
  
 // Quicksort routine
 void quicksort(int a[], int low, int high){
-    // base condition
+    int pivot = 0;
+	// base condition
     if (low >= high) {
         return;
     }
  
     // rearrange elements across pivot
-    int pivot = partition(a, low, high);
+    pivot = partition(a, low, high);
  
     // recur on subarray containing elements that are less than the pivot
     quicksort(a, low, pivot);
  
     // recur on subarray containing elements that are more than the pivot
-    quicksort(a, pivot + 1, high);
+    quicksort(a, pivot, high);
 }
 
 double quickSortHoare(int vetor[], int tam){
 	clock_t inicio = clock();
+	int esq;
+	int dir;
+	esq = 0;
+	dir = tam;
 	
-	hoare(vetor, 0, tam-1);
+	hoare(vetor, tam);
 	//quicksort(vetor, 1, tam);
 
 	double tempo = (double) (clock() - inicio) / CLOCKS_PER_SEC;
@@ -167,7 +198,8 @@ int main(){
     int *vetor = malloc(TAM * sizeof(int));
 
     for(int cont= TAM, i=0; cont>0; cont--, i++){//invertido
-        vetor[i] = cont;
+        //vetor[i] = cont;
+		vetor[i] = i;
     }
 
 	double tempo = quickSortHoare(vetor, TAM);

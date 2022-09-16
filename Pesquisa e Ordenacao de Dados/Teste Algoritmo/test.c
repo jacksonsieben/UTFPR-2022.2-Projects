@@ -1,35 +1,78 @@
+// Quick sort in C
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
-int main(){
-    //menu
-    int opcao;
-    inicio:
-    system("cls");
-    system("color 0F");
-    printf("1 - JOGAR \n2 - RANKINGS \n3 - CREDITOS \n4 - SAIR\n");
-    opcao = getch();
-    switch (opcao) {
-    case '1':
-        system("cls");
-        printf("GAME\n");
-        break;
-    case '2':
-        system("cls");
-        printf("Ranking\n");
-        break;
-    case '3':
-        system("cls");
-        printf("Creditos\n");
-        break;
-    case '4':
-        system("cls");
-        printf("voce pediu para sair, prencione qualquer tecla para continuar\n");
-        break;
-    default:
-        printf("voce deve escolher uma opcao valida\n");
-        printf("Precione qualquer tecla para voltar ao menu\n");
-        system("pause");
-        goto inicio;
+#include <time.h>
+#define TAM 500000
+int partitionHoare(int vetor[], int esq, int dir){
+    int x = vetor[dir/2]; // tam/2
+    for ( ; ; esq++, dir--) {
+        while (vetor[esq] < x){
+            esq++;
+        }
+        while (vetor[dir] > x){
+            dir--;
+        }
+        if (esq >= dir) {
+            break;
+        }
+        int aux2 = vetor[esq];
+        vetor[esq] = vetor[dir];
+        vetor[dir] = aux2;
     }
+    return esq;
 }
+// function to swap elements
+void quicksort(int *vetor, int tam) {
+    //clock_t inicio = clock();
+    if (tam < 2) {
+        return;
+    }
+    int esq = partitionHoare(vetor, 0, tam-1);
+    quicksort(vetor, esq);
+    quicksort(vetor + esq, tam - esq);
+    /*clock_t fim = clock();
+    double gasto = difftime(fim,inicio)/CLOCKS_PER_SEC;
+    printf("\ntempo gasto: %f segundos\n", gasto);*/
+}
+
+void quicksortH(int *vetor, int tam) {
+  if (tam < 2) {
+      return;
+  }
+  int x = vetor[tam/2]; 
+  int esq, dir;
+  for (esq = 0, dir = tam - 1; ; esq++, dir--) {
+      while (vetor[esq] < x){
+          esq++;
+      }
+      while (vetor[dir] > x){
+          dir--;
+      }
+      if (esq >= dir) {
+          break;
+      }
+      int aux2 = vetor[esq];
+      vetor[esq] = vetor[dir];
+      vetor[dir] = aux2;
+  }
+  quicksortH(vetor, esq);
+  quicksortH(vetor + esq, tam - esq);
+}
+
+// main function
+int main() {
+    int *vetor = malloc(TAM * sizeof(int));
+
+    for(int cont= TAM, i=0; cont>0; cont--, i++){//invertido
+        vetor[i] = cont;
+    }
+
+    clock_t inicio = clock();
+    quicksortH(vetor, TAM);
+    double tempo = (double) (clock() - inicio) / CLOCKS_PER_SEC;
+
+    printf("\nOrdenado em: %.5fs\n", tempo);
+    //printf("finalizado");
+}
+
