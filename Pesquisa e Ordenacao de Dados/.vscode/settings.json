@@ -1,5 +1,20 @@
 {
     "files.associations": {
         "quickHoare.c": "c",
+        "array": "c",
+        "*.tcc": "c",
+        "deque": "c",
+        "string": "c",
+        "unordered_map": "c",
+        "vector": "c",
+        "memory": "c",
+        "fstream": "c",
+        "functional": "c",
+        "istream": "c",
+        "ostream": "c",
+        "sstream": "c",
+        "streambuf": "c",
+        "tuple": "c",
+        "type_traits": "c"
     }
 }

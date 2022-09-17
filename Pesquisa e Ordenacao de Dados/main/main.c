@@ -7,7 +7,7 @@
 
 #define CORD 28
 #define CINV 37
-#define CALT 48
+#define CALT 47
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,9 +23,6 @@
     *? pensar em gerar o relatorio de forma txt pra ter isso armazenado, e poder trocar o tamanho do arquivo
     *? ver o shellSort.c par verificar se vou por o tamanho da tela mais setado
     *! \t é equivalente a 8 espaços no console
-    *TODO TABELA 500 MIL
-    *TODO TABELA 750 MIL
-    *TODO TABELA 1 MILHAO
     ** QuickSort Hoare
     ** QuickSort Lomoto
     ** Mergesort https://gist.github.com/olegon/27c2a880c9b932862e60ab5eb89be5b6
@@ -205,7 +202,7 @@ void tabDraw (pTAlgoritmo pTA){
         printf("%.2lfs", pTA->shellSort->ordenado);
         gotoxy(CINV+1,6);//linha 6 coluna INVERTIDO
         printf("%.2lfs", pTA->shellSort->invertido);
-        gotoxy(CALT,6);//linha 6 coluna ALEATORIO 
+        gotoxy(CALT+1,6);//linha 6 coluna ALEATORIO 
         printf("%.2lfs", pTA->shellSort->aleatorio);
     }
 
@@ -214,16 +211,16 @@ void tabDraw (pTAlgoritmo pTA){
         printf("%.2lfs", pTA->quickSortHoare->ordenado);
         gotoxy(CINV+1,7);//linha 7 coluna INVERTIDO
         printf("%.2lfs", pTA->quickSortHoare->invertido);
-        gotoxy(CALT,7);//linha 7 coluna ALEATORIO 
+        gotoxy(CALT+1,7);//linha 7 coluna ALEATORIO 
         printf("%.2lfs", pTA->quickSortHoare->aleatorio);
     }
 
     if(pTA->quickSortLomuto != NULL){    
-        gotoxy(CORD+1,8);//linha 8 coluna ORDENADO
+        gotoxy(CORD,8);//linha 8 coluna ORDENADO
         printf("%.2lfs", pTA->quickSortLomuto->ordenado);
-        gotoxy(CINV+1,8);//linha 8 coluna INVERTIDO
+        gotoxy(CINV,8);//linha 8 coluna INVERTIDO
         printf("%.2lfs", pTA->quickSortLomuto->invertido);
-        gotoxy(CALT,8);//linha 8 coluna ALEATORIO 
+        gotoxy(CALT+1,8);//linha 8 coluna ALEATORIO 
         printf("%.2lfs", pTA->quickSortLomuto->aleatorio);
     }
 
@@ -232,7 +229,7 @@ void tabDraw (pTAlgoritmo pTA){
         printf("%.2lfs", pTA->mergeSort->ordenado);
         gotoxy(CINV+1,9);//linha 9 coluna INVERTIDO
         printf("%.2lfs", pTA->mergeSort->invertido);
-        gotoxy(CALT,9);//linha 9 coluna ALEATORIO 
+        gotoxy(CALT+1,9);//linha 9 coluna ALEATORIO 
         printf("%.2lfs", pTA->mergeSort->aleatorio);
     }
 
@@ -241,7 +238,7 @@ void tabDraw (pTAlgoritmo pTA){
         printf("%.2lfs", pTA->radixSort->ordenado);
         gotoxy(CINV+1,10);//linha 10 coluna INVERTIDO
         printf("%.2lfs", pTA->radixSort->invertido);
-        gotoxy(CALT,10);//linha 10 coluna ALEATORIO 
+        gotoxy(CALT+1,10);//linha 10 coluna ALEATORIO 
         printf("%.2lfs", pTA->radixSort->aleatorio);
     }
 
@@ -341,43 +338,84 @@ void troca(int vet[], int i, int j){
 	vet[j] = aux;
 }
 
-int particionaHoare(int vet[], int esq, int dir){
-	int x = vet[esq], up = dir, down = esq;
-	while(down < up){
-		while(vet[down] <= x && down < dir){
-			down++;
-		}
-		while(vet[up] > x){
-			up--;
-		}
-		if(down < up){
-			troca(vet, down, up);
-		}
-	}
-
-	vet[esq] = vet[up];
-	vet[up] = x;
-
-	return up;
+int partitionHoare(int *vetor, int tam){
+    int x = vetor[tam/2];
+    int esq, dir;
+    for (esq = 0, dir = tam - 1; ; esq++, dir--) {
+        while (vetor[esq] < x){
+            esq++;
+        }
+        while (vetor[dir] > x){
+            dir--;
+        }
+        if (esq >= dir) {
+            return esq;
+        }
+        int aux2 = vetor[esq];
+        vetor[esq] = vetor[dir];
+        vetor[dir] = aux2;
+    }
 }
 
-double hoare(int vetor[], int esq, int dir){
-	int i;
+void hoare(int *vetor, int tam) {
+    if(tam<2){
+        return;
+    }
+    int esq = partitionHoare(vetor, tam);
+    if(tam>esq){
+        hoare(vetor, esq);
+        hoare(vetor + esq, tam - esq);
+    }
+}
+
+double quickSortHoare (int *vetor, int tam) {
 	clock_t inicio = clock();
 
-	if(dir > esq){
-		i = particionaHoare(vetor, esq, dir);
-		hoare(vetor, esq, i-1);
-		hoare(vetor, i+1, dir);
-	}
+	hoare(vetor, tam);
 
 	double tempo = (double) (clock() - inicio) / CLOCKS_PER_SEC;
 
-    return tempo;
+	return tempo;
 }
 
-double quickSortHoare(int vetor[], int tam){
-	return hoare(vetor, 0, tam-1);
+int partitionLomuto(int arr[], int low, int high){
+    int pivot = arr[high];
+    int i = low - 1;
+    for (int j = low; j < high; j++) {
+        if (arr[j] <= pivot) {
+            i++;
+            int tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+        }
+    }
+    int tmp = arr[i + 1];
+    arr[i + 1] = arr[high];
+    arr[high] = tmp;
+    return (i + 1);
+}
+
+void lomuto(int arr[], int low, int high){
+    while (low < high) {
+        int index = partitionLomuto(arr, low, high);
+        if((index-low) <= (high-index)){       // avoid stack overflow
+            lomuto(arr, low, index - 1);    //
+            low = index+1;                     //
+        }else{                                 //
+            lomuto(arr, index + 1, high);   //
+            high = index-1;                    //
+        }                                      //
+    }
+}
+
+double quickSortLomuto(int *vetor, int tam){
+    clock_t inicio = clock();
+
+    lomuto(vetor, 0, tam - 1);
+
+    double tempo = (double) (clock() - inicio) / CLOCKS_PER_SEC;
+
+    return tempo;
 }
 
 void merge(int a[], int esq, int meio, int dir) {
@@ -637,7 +675,7 @@ int menuAlgoritmo(pTAlgoritmo pTA){
         case '6':
             system("cls");
             printf("\t     ** QuickSort Lomuto **");
-            //pTA->quickSortLomuto = ordenar(pTA->tam, quickSortLomuto);
+            pTA->quickSortLomuto = ordenar(pTA->tam, quickSortLomuto);
             tabDraw(pTA);
             break;
         case '7':
@@ -663,6 +701,14 @@ int menuAlgoritmo(pTAlgoritmo pTA){
             pTA->selectSort = ordenar(pTA->tam, selectionSort);
             printf("\n\t     ** ShellSort **");
             pTA->shellSort = ordenar(pTA->tam, shellSort);
+            printf("\t     ** QuickSort Hoare **");
+            pTA->quickSortHoare = ordenar(pTA->tam, quickSortHoare);
+            printf("\t     ** QuickSort Lomuto **");
+            pTA->quickSortLomuto = ordenar(pTA->tam, quickSortLomuto);
+            printf("\t     ** MergeSort **");
+            pTA->mergeSort = ordenar(pTA->tam, mergeSort);
+            /*printf("\t     ** RadixSort **");
+            pTA->radixSort = ordenar(pTA->tam, radixSort);*/
             system("cls");
             tabDraw(pTA);
             break;

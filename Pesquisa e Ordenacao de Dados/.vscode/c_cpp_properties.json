@@ -3,8 +3,8 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}\\**",
-                "C:\\Users\\jacks\\Documents\\GitHub\\UTFPR-2022.2-Projects\\Pesquisa e Ordenacao de Dados\\Teste Algoritmo"
+                "${workspaceFolder}\\**"
+                //"C:\\Users\\jacks\\Documents\\GitHub\\UTFPR-2022.2-Projects\\Pesquisa e Ordenacao de Dados\\Teste Algoritmo"
             ],
             "defines": [
                 "_DEBUG",
