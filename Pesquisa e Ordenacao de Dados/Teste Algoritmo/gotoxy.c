@@ -9,6 +9,21 @@ void gotoxy(int x, int y)
   coord.Y = y;
   SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
+
+    /*
+        for (l=0; l<col; l++){
+        for (c=0; c<lin; c++){
+            gotoxy(10+l,1+c);
+            switch (tabela [c][l]){
+                case '*': printf(" ");   break;
+                //case 'b': printf("%c", 3);   break;
+                //case 'e': printf("%c", 42);  break;
+                case '|': printf("%c", 179); break;
+                default: printf("%c", tabela [c][l]);
+            }
+        }
+    }
+    */
  
 main(){
   int coluna = 5;

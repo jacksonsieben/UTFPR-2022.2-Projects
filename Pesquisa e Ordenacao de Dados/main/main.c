@@ -1,46 +1,42 @@
-#define Q500K 500000
-#define Q750K 750000
-#define Q1KK  1000000
-#define OUT 6
-#define SCREEN_WIDTH 500
-#define SCREEN_HEIGHT 400
-
-#define CORD 28
-#define CINV 37
-#define CALT 47
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
-#include <locale.h>
 #include <windows.h>
 
-/**  
+#define Q500K 500000        //define quantidade 500 Mil
+#define Q750K 750000        //define quantidade 750 Mil
+#define Q1KK  1000000       //define quantidade 1 Milhao
+#define OUTLP 0             //define saida do loop em 0
+#define SCREEN_WIDTH 500    //define largura da tela
+#define SCREEN_HEIGHT 400   //define altura da tela
+
+#define CORD 28             //define pixel da coluna ordenada
+#define CINV 38             //define pixel da coluna invertido
+#define CALT 48             //define pixel da coluna aleatorio
+
+#define lin 10              //define quantidade de linhas da matriz de impressão
+#define col 48              //define quantidade de colunas da matriz de impressão
+
+
+
+/**
     *!                                          Anotacoes
-    *? talvez gerar um relatorio ao selecionar no menu para que possa ter os dados gerados de forma mais eficiente
-    *? CRIAR UMA MATRIZ QUE VAI COLOCAR O TEMPO DE CADA ALGORITIMO E IMPRIMIR COM GOTOXY TODA VEZ QUE FOR USADO UM ALGORITIMO
-    *? pensar em gerar o relatorio de forma txt pra ter isso armazenado, e poder trocar o tamanho do arquivo
-    *? ver o shellSort.c par verificar se vou por o tamanho da tela mais setado
-    *! \t é equivalente a 8 espaços no console
-    ** QuickSort Hoare
-    ** QuickSort Lomoto
-    ** Mergesort https://gist.github.com/olegon/27c2a880c9b932862e60ab5eb89be5b6
-    ** Radixsort
+    *! Falta apenas o Radixsort
 **/
 
-char tabela [10][47]=   { //                                                       |13                                |meio*/
-                        {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', 'T', 'A', 'B', 'E', 'L', 'A', ' ', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
-                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', 'O', 'R', 'D', 'E', 'N', 'A', 'D', 'O', '|', 'I', 'N', 'V', 'E', 'R', 'T', 'I', 'D', 'O', '|', 'A', 'L', 'E', 'A', 'T', 'O', 'R', 'I', 'O', '|'},
-                        {'B', 'U', 'B', 'B', 'L', 'E', 'S', 'O', 'R', 'T', ' ', ' ', ' ', ' ', ' ', ' ', '|', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},
-                        {'I', 'N', 'S', 'E', 'R', 'T', 'S', 'O', 'R', 'T', ' ', ' ', ' ', ' ', ' ', ' ', '|', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},
-                        {'S', 'E', 'L', 'E', 'C', 'T', 'S', 'O', 'R', 'T', ' ', ' ', ' ', ' ', ' ', ' ', '|', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},        
-                        {'S', 'H', 'E', 'L', 'L', 'S', 'O', 'R', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},
-                        {'Q', 'U', 'I', 'C', 'K', 'S', 'O', 'R', 'T', ' ', 'H', 'O', 'A', 'R', 'E', ' ', '|', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},
-                        {'Q', 'U', 'I', 'C', 'K', 'S', 'O', 'R', 'T', ' ', 'L', 'O', 'M', 'U', 'T', 'O', '|', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},
-                        {'M', 'E', 'R', 'G', 'E', 'S', 'O', 'R', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},
-                        {'R', 'A', 'D', 'I', 'X', 'S', 'O', 'R', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'}
-                        };// 47 colunas, 10 linhas
+char tabela [lin][col]=   {
+                        {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', ' ', '*', '*', 'T', 'A', 'B', 'E', 'L', 'A', ' ', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
+                        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', ' ', 'O', 'R', 'D', 'E', 'N', 'A', 'D', 'O', '|', 'I', 'N', 'V', 'E', 'R', 'T', 'I', 'D', 'O', '|', 'A', 'L', 'E', 'A', 'T', 'O', 'R', 'I', 'O', '|'},
+                        {'B', 'U', 'B', 'B', 'L', 'E', 'S', 'O', 'R', 'T', ' ', ' ', ' ', ' ', ' ', ' ', '|', ' ', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},
+                        {'I', 'N', 'S', 'E', 'R', 'T', 'S', 'O', 'R', 'T', ' ', ' ', ' ', ' ', ' ', ' ', '|', ' ', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},
+                        {'S', 'E', 'L', 'E', 'C', 'T', 'S', 'O', 'R', 'T', ' ', ' ', ' ', ' ', ' ', ' ', '|', ' ', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},
+                        {'S', 'H', 'E', 'L', 'L', 'S', 'O', 'R', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', ' ', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},
+                        {'Q', 'U', 'I', 'C', 'K', 'S', 'O', 'R', 'T', ' ', 'H', 'O', 'A', 'R', 'E', ' ', '|', ' ', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},
+                        {'Q', 'U', 'I', 'C', 'K', 'S', 'O', 'R', 'T', ' ', 'L', 'O', 'M', 'U', 'T', 'O', '|', ' ', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},
+                        {'M', 'E', 'R', 'G', 'E', 'S', 'O', 'R', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', ' ', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},
+                        {'R', 'A', 'D', 'I', 'X', 'S', 'O', 'R', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', ' ', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'}
+                        };// 48 colunas, 10 linhas
 
 struct tempo{
     double ordenado;
@@ -85,15 +81,15 @@ pTAlgoritmo criarStruct(){
 }
 
 void showCursor(int bShow){
-/******************************* showCursor ***********************************
-    shows/hides the curser by TRUE/FALSE.
-       
-    PRE : bShow - TRUE/FALSE
-    POST: Returns nothing.
-*******************************************************************************/ 
+    /******************************* showCursor ***********************************
+        shows/hides the curser by TRUE/FALSE.
+
+        PRE : bShow - TRUE/FALSE
+        POST: Returns nothing.
+    *******************************************************************************/
     int nSize = 25; 	//The nSize = the cursor height, optional parameter, by default 25. Size range: 1 - 100
 	CONSOLE_CURSOR_INFO CurInfo;
-	
+
 	//Define the cursor size
 	if (nSize <= 0) nSize = 1;
 	if (nSize > 100) nSize = 100;
@@ -103,13 +99,13 @@ void showCursor(int bShow){
 } /* showCursor */
 
 void setScreenSize(int x, int y){
-/**************** setScreenSize *******************************
-    changes screen to full.
-       
-    PRE : x  - left/right width.
-          y  - up/down length.
-    POST: Returns nothing.
-***************************************************************/ 
+    /**************** setScreenSize *******************************
+        changes screen to full.
+
+        PRE : x  - left/right width.
+            y  - up/down length.
+        POST: Returns nothing.
+    ***************************************************************/
     HANDLE hConsoleOutput;
     COORD coord;
     CONSOLE_SCREEN_BUFFER_INFO  ConsoleInfo;
@@ -131,37 +127,20 @@ void gotoxy(int x, int y) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),c);
 }
 
-void frame (int ci, int cf, int li, int lf){
-    int l,c;
-    for (c=ci+1; c<=cf-1;c++){
-        gotoxy(c, li); printf("%c", 220);
-        gotoxy(c, lf); printf("%c", 223);
-    }
-    for (l=li; l<=lf;l++){
-        gotoxy(ci, l); printf("%c", 219);
-        gotoxy(cf, l); printf("%c", 219);
-    }
-    gotoxy(ci, li); printf("%c", 220);
-    gotoxy(cf, li); printf("%c", 220);
-    gotoxy(ci, lf); printf("%c", 223);
-    gotoxy(cf, lf); printf("%c", 223);
-}
-
 void tabDraw (pTAlgoritmo pTA){
     system("cls");
-    int l, c;
-    for (l=0; l<47; l++){
-        for (c=0; c<10; c++){
-            gotoxy(10+l,1+c);
-            switch (tabela [c][l]){
+
+    for (int c=0; c<col; c++){
+        for (int l=0; l<lin; l++){
+            gotoxy(10+c,1+l);
+            switch (tabela [l][c]){
                 case '*': printf(" ");   break;
-                /*case 'b': printf("%c", 3);   break;
-                case 'e': printf("%c", 42);  break;
-                case 'f': printf("%c", 250); break;*/
-                default: printf("%c", tabela [c][l]);
+                case '|': printf("%c", 179); break;
+                default: printf("%c", tabela [l][c]);
             }
         }
     }
+
     if(pTA->tam != Q1KK){
         gotoxy(CINV,1);
         printf("%d MIL", (pTA->tam/1000));
@@ -172,74 +151,74 @@ void tabDraw (pTAlgoritmo pTA){
 
     if(pTA->bubbleSort != NULL){
         gotoxy(CORD,3);//linha 3 coluna ORDENADO
-        printf("%.2lfs", pTA->bubbleSort->ordenado);
+        printf("%.3lf", pTA->bubbleSort->ordenado);
         gotoxy(CINV,3);//linha 3 coluna INVERTIDO
-        printf("%.2lfs", pTA->bubbleSort->invertido);
+        printf("%.3lf", pTA->bubbleSort->invertido);
         gotoxy(CALT,3);//linha 3 coluna ALEATORIO
-        printf("%.2lfs", pTA->bubbleSort->aleatorio);
+        printf("%.3lf", pTA->bubbleSort->aleatorio);
     }
 
     if(pTA->insertSort != NULL){
         gotoxy(CORD,4);//linha 4 coluna ORDENADO
-        printf("%.2lfs", pTA->insertSort->ordenado);
+        printf("%.3lf", pTA->insertSort->ordenado);
         gotoxy(CINV,4);//linha 4 coluna INVERTIDO
-        printf("%.2lfs", pTA->insertSort->invertido);
+        printf("%.3lf", pTA->insertSort->invertido);
         gotoxy(CALT,4);//linha 4 coluna ALEATORIO
-        printf("%.2lfs", pTA->insertSort->aleatorio);
+        printf("%.3lf", pTA->insertSort->aleatorio);
     }
 
-    if(pTA->selectSort != NULL){    
+    if(pTA->selectSort != NULL){
         gotoxy(CORD,5);//linha 5 coluna ORDENADO
-        printf("%.2lfs", pTA->selectSort->ordenado);
+        printf("%.3lf", pTA->selectSort->ordenado);
         gotoxy(CINV,5);//linha 5 coluna INVERTIDO
-        printf("%.2lfs", pTA->selectSort->invertido);
+        printf("%.3lf", pTA->selectSort->invertido);
         gotoxy(CALT,5);//linha 5 coluna ALEATORIO
-        printf("%.2lfs", pTA->selectSort->aleatorio);
+        printf("%.3lf", pTA->selectSort->aleatorio);
     }
 
-    if(pTA->shellSort != NULL){    
+    if(pTA->shellSort != NULL){
         gotoxy(CORD+1,6);//linha 6 coluna ORDENADO
-        printf("%.2lfs", pTA->shellSort->ordenado);
+        printf("%.3lf", pTA->shellSort->ordenado);
         gotoxy(CINV+1,6);//linha 6 coluna INVERTIDO
-        printf("%.2lfs", pTA->shellSort->invertido);
-        gotoxy(CALT+1,6);//linha 6 coluna ALEATORIO 
-        printf("%.2lfs", pTA->shellSort->aleatorio);
+        printf("%.3lf", pTA->shellSort->invertido);
+        gotoxy(CALT+1,6);//linha 6 coluna ALEATORIO
+        printf("%.3lf", pTA->shellSort->aleatorio);
     }
 
-    if(pTA->quickSortHoare != NULL){    
+    if(pTA->quickSortHoare != NULL){
         gotoxy(CORD+1,7);//linha 7 coluna ORDENADO
-        printf("%.2lfs", pTA->quickSortHoare->ordenado);
+        printf("%.3lf", pTA->quickSortHoare->ordenado);
         gotoxy(CINV+1,7);//linha 7 coluna INVERTIDO
-        printf("%.2lfs", pTA->quickSortHoare->invertido);
-        gotoxy(CALT+1,7);//linha 7 coluna ALEATORIO 
-        printf("%.2lfs", pTA->quickSortHoare->aleatorio);
+        printf("%.3lf", pTA->quickSortHoare->invertido);
+        gotoxy(CALT+1,7);//linha 7 coluna ALEATORIO
+        printf("%.3lf", pTA->quickSortHoare->aleatorio);
     }
 
-    if(pTA->quickSortLomuto != NULL){    
+    if(pTA->quickSortLomuto != NULL){
         gotoxy(CORD,8);//linha 8 coluna ORDENADO
-        printf("%.2lfs", pTA->quickSortLomuto->ordenado);
+        printf("%.3lf", pTA->quickSortLomuto->ordenado);
         gotoxy(CINV,8);//linha 8 coluna INVERTIDO
-        printf("%.2lfs", pTA->quickSortLomuto->invertido);
-        gotoxy(CALT+1,8);//linha 8 coluna ALEATORIO 
-        printf("%.2lfs", pTA->quickSortLomuto->aleatorio);
+        printf("%.3lf", pTA->quickSortLomuto->invertido);
+        gotoxy(CALT+1,8);//linha 8 coluna ALEATORIO
+        printf("%.3lf", pTA->quickSortLomuto->aleatorio);
     }
 
-    if(pTA->mergeSort != NULL){    
+    if(pTA->mergeSort != NULL){
         gotoxy(CORD+1,9);//linha 9 coluna ORDENADO
-        printf("%.2lfs", pTA->mergeSort->ordenado);
+        printf("%.3lf", pTA->mergeSort->ordenado);
         gotoxy(CINV+1,9);//linha 9 coluna INVERTIDO
-        printf("%.2lfs", pTA->mergeSort->invertido);
-        gotoxy(CALT+1,9);//linha 9 coluna ALEATORIO 
-        printf("%.2lfs", pTA->mergeSort->aleatorio);
+        printf("%.3lf", pTA->mergeSort->invertido);
+        gotoxy(CALT+1,9);//linha 9 coluna ALEATORIO
+        printf("%.3lf", pTA->mergeSort->aleatorio);
     }
 
-    if(pTA->radixSort != NULL){    
+    if(pTA->radixSort != NULL){
         gotoxy(CORD+1,10);//linha 10 coluna ORDENADO
-        printf("%.2lfs", pTA->radixSort->ordenado);
+        printf("%.3lf", pTA->radixSort->ordenado);
         gotoxy(CINV+1,10);//linha 10 coluna INVERTIDO
-        printf("%.2lfs", pTA->radixSort->invertido);
-        gotoxy(CALT+1,10);//linha 10 coluna ALEATORIO 
-        printf("%.2lfs", pTA->radixSort->aleatorio);
+        printf("%.3lf", pTA->radixSort->invertido);
+        gotoxy(CALT+1,10);//linha 10 coluna ALEATORIO
+        printf("%.3lf", pTA->radixSort->aleatorio);
     }
 
     gotoxy(5,14);
@@ -248,9 +227,7 @@ void tabDraw (pTAlgoritmo pTA){
     getch();
 }
 
-/** 
-   *TODO ==================================================================ALGORITMOS==================================================================
-**/
+//? =================================================================================ALGORITMOS=======================================================================
 
 double bubbleSort(int vetor[], int tam){
     clock_t inicio = clock();
@@ -310,7 +287,7 @@ double selectionSort(int vetor[], int tam){
 double shellSort(int vetor[], int tam){
     int h, aux;
     clock_t inicio = clock();
-    
+
     for (h = 1; h < tam; h = 3*h +1);
     while(h>0){
         h = (h-1)/3;
@@ -398,13 +375,13 @@ int partitionLomuto(int arr[], int low, int high){
 void lomuto(int arr[], int low, int high){
     while (low < high) {
         int index = partitionLomuto(arr, low, high);
-        if((index-low) <= (high-index)){       // avoid stack overflow
-            lomuto(arr, low, index - 1);    //
-            low = index+1;                     //
-        }else{                                 //
-            lomuto(arr, index + 1, high);   //
-            high = index-1;                    //
-        }                                      //
+        if((index-low) <= (high-index)){
+            lomuto(arr, low, index - 1);
+            low = index+1;
+        }else{
+            lomuto(arr, index + 1, high);
+            high = index-1;
+        }
     }
 }
 
@@ -457,9 +434,9 @@ double mergeSort(int vetor[], int tam){
 
     return tempo;
 }
-/** 
-   *? =================================================================================ARQUIVOS=======================================================================
-**/
+
+//? =================================================================================ARQUIVOS=======================================================================
+
 int randomInteger (int high){
     double d;
     d = (double) rand () / ((double) RAND_MAX + 1);
@@ -531,24 +508,22 @@ void gerarArquivosAleatorio(){
 }
 
 void lerArquivo (FILE *file, int vetor[]){
-    for (int i = 0; !feof (file); i++){        
-        fscanf (file, "%d", &vetor[i]); 
+    for (int i = 0; !feof (file); i++){
+        fscanf (file, "%d", &vetor[i]);
     }
 }
 
-/** 
-   *? ============================================================================ORDENAÇÃO============================================================================
-**/
+//? ============================================================================ORDENAÇÃO============================================================================
 
-pTempo ordenar(int tam, algOrdenacao algoritmo){//TODO: trazer funcao por parametro
+pTempo ordenar(int tam, algOrdenacao algoritmo){
     pTempo pt = malloc(sizeof(Tempo));
 
     int *vetor = malloc(tam * sizeof(int));
     double tOrdenado, tInvertido, tAleatorio;
-        
+
     FILE *ordenado, *invertido, *aleatorio;
     char nomeOrdenado[255], nomeInvertido[255], nomeAleatorio[255];
-    
+
     sprintf(nomeOrdenado, "Ordenado%05d.txt", tam);
     sprintf(nomeInvertido, "Invertido%05d.txt", tam);
     sprintf(nomeAleatorio, "Aleatorio%05d.txt", tam);
@@ -577,18 +552,17 @@ pTempo ordenar(int tam, algOrdenacao algoritmo){//TODO: trazer funcao por parame
 
     return pt;
 }
-/** 
-   *? ============================================================================MENUS============================================================================
-**/
+
+//? ============================================================================MENUS============================================================================
 
 int menuTamanho(){
     system("cls");
-    
+    //setlocale(LC_ALL,"Portuguese_Brazil.1252");
     int option;
     printf("    ** Escolha o tamanho do arquivo **\n\n");
     printf("\t\t1- 500 Mil\n");
     printf("\t\t2- 750 Mil\n");
-    printf("\t\t3- 1 Milhão\n");
+    printf("\t\t3- 1 Milhao\n");
     printf("\t\t4- Sair\n");
 
     fflush(stdin);
@@ -609,14 +583,14 @@ int menuTamanho(){
             invertido("", Q1KK);
             option = Q1KK;
             break;
-        case '4': 
+        case '4':
             system("cls");
             printf("Adeus!");
             option = 0;
 
     default:
         system("cls");
-        printf("Erro: Opção não encontrada");
+        printf("Erro: Opcao nao encontrada");
         break;
     }
 
@@ -625,9 +599,9 @@ int menuTamanho(){
 
 int menuAlgoritmo(pTAlgoritmo pTA){
     int option;
-    
+
     system("cls");
-    printf("\t** Escolha o algoritmo de ordenação **\n\n");
+    printf("\t** Escolha o algoritmo de ordenacao **\n\n");
     printf("\t\t   1- BubbleSort\n");
     printf("\t\t   2- InsertSort\n");
     printf("\t\t   3- SelectSort\n");
@@ -642,7 +616,7 @@ int menuAlgoritmo(pTAlgoritmo pTA){
     fflush(stdin);
     option = getch();
     switch (option){
-        case '1': 
+        case '1':
             system("cls");
             printf("\t     ** BubbleSort **");
             pTA->bubbleSort = ordenar(pTA->tam, bubbleSort);
@@ -715,16 +689,16 @@ int menuAlgoritmo(pTAlgoritmo pTA){
         case '0':
             system("cls");
             printf("Adeus!");
-            return 0;
+            return OUTLP;
             break;
         default:
             system("cls");
-            printf("Erro opção não identificada");
+            printf("Erro opcao nao identificada");
             printf("\n\nAperte qualquer tecla para voltar ao menu!");
             getch();
             break;
     }
-    return option; 
+    return option;
 }
 
 void menuInicial(pTAlgoritmo pTA){
@@ -732,14 +706,12 @@ void menuInicial(pTAlgoritmo pTA){
     if(pTA->tam == 0){
         system("cls");
     }else{
-        while(menuAlgoritmo(pTA) != 0);
+        while(menuAlgoritmo(pTA) != OUTLP);
     }
 }
 
 int main(){
     pTAlgoritmo pTA = criarStruct();
-    setlocale(LC_ALL,"Portuguese_Brazil.1252");
-    
     setScreenSize(800,600);
     showCursor(0);
 
@@ -748,6 +720,6 @@ int main(){
     system("cls");
     system("color 0F");
     menuInicial(pTA);
-    
+
     free(pTA);
 }
