@@ -26,7 +26,7 @@ void gotoxy(int x, int y)
     */
  
 main(){
-  int coluna = 5;
+  /*nt coluna = 5;
   int linha  = 3;
   system("cls");
    
@@ -34,5 +34,8 @@ main(){
   printf("Terminal de");
    
   gotoxy(coluna, linha+1);
-  printf("Informacao.\n");
+  printf("Informacao.\n");*/
+  for (int i=0; i<256; i++){
+    printf("%d %c\t", i, i);
+  }
 }

@@ -7,7 +7,7 @@
 #define Q500K 500000        //define quantidade 500 Mil
 #define Q750K 750000        //define quantidade 750 Mil
 #define Q1KK  1000000       //define quantidade 1 Milhao
-#define OUTLP 0             //define saida do loop em 0
+#define OUTLP 27             //define saida do loop em 0
 #define SCREEN_WIDTH 500    //define largura da tela
 #define SCREEN_HEIGHT 400   //define altura da tela
 
@@ -15,7 +15,7 @@
 #define CINV 38             //define pixel da coluna invertido
 #define CALT 48             //define pixel da coluna aleatorio
 
-#define lin 10              //define quantidade de linhas da matriz de impressão
+#define lin 11              //define quantidade de linhas da matriz de impressão
 #define col 48              //define quantidade de colunas da matriz de impressão
 
 
@@ -23,6 +23,8 @@
 /**
     *!                                          Anotacoes
     *! Falta apenas o Radixsort
+    *! Falta o HeapSort (que esta pronto)
+    *! Testar se faz diferença ao executar todos ao mesmo tempo
 **/
 
 char tabela [lin][col]=   {
@@ -35,8 +37,9 @@ char tabela [lin][col]=   {
                         {'Q', 'U', 'I', 'C', 'K', 'S', 'O', 'R', 'T', ' ', 'H', 'O', 'A', 'R', 'E', ' ', '|', ' ', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},
                         {'Q', 'U', 'I', 'C', 'K', 'S', 'O', 'R', 'T', ' ', 'L', 'O', 'M', 'U', 'T', 'O', '|', ' ', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},
                         {'M', 'E', 'R', 'G', 'E', 'S', 'O', 'R', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', ' ', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},
-                        {'R', 'A', 'D', 'I', 'X', 'S', 'O', 'R', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', ' ', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'}
-                        };// 48 colunas, 10 linhas
+                        {'R', 'A', 'D', 'I', 'X', 'S', 'O', 'R', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', ' ', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'},
+                        {'H', 'E', 'A', 'P', 'S', 'O', 'R', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', ' ', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|', '*', '*', '*', '*', '*', '*', '*', '*', '*', '|'}
+                        };// 48 colunas, 11 linhas
 
 struct tempo{
     double ordenado;
@@ -54,6 +57,7 @@ struct tAlgoritmo{
     struct tempo *quickSortLomuto;
     struct tempo *mergeSort;
     struct tempo *radixSort;
+    struct tempo *heapSort;
 };
 
 typedef struct tempo  Tempo;
@@ -76,6 +80,7 @@ pTAlgoritmo criarStruct(){
     pTA->quickSortLomuto  = NULL;
     pTA->mergeSort  = NULL;
     pTA->radixSort  = NULL;
+    pTA->heapSort = NULL;
 
     return pTA;
 }
@@ -221,6 +226,15 @@ void tabDraw (pTAlgoritmo pTA){
         printf("%.3lf", pTA->radixSort->aleatorio);
     }
 
+    if(pTA->heapSort != NULL){
+        gotoxy(CORD+1,11);//linha 11 coluna ORDENADO
+        printf("%.3lf", pTA->heapSort->ordenado);
+        gotoxy(CINV+1,11);//linha 11 coluna INVERTIDO
+        printf("%.3lf", pTA->heapSort->invertido);
+        gotoxy(CALT+1,11);//linha 11 coluna ALEATORIO
+        printf("%.3lf", pTA->heapSort->aleatorio);
+    }
+
     gotoxy(5,14);
     printf("Aperte qualquer tecla para voltar ao menu!");
     fflush(stdin);
@@ -309,12 +323,6 @@ double shellSort(int vetor[], int tam){
     return tempo;
 }
 
-void troca(int vet[], int i, int j){
-	int aux = vet[i];
-	vet[i] = vet[j];
-	vet[j] = aux;
-}
-
 int partitionHoare(int *vetor, int tam){
     int x = vetor[tam/2];
     int esq, dir;
@@ -395,43 +403,149 @@ double quickSortLomuto(int *vetor, int tam){
     return tempo;
 }
 
-void merge(int a[], int esq, int meio, int dir) {
-    int i, j, k;
-    int aux[dir];
-    for (i = meio +1; i > esq; i--){
-        aux[i-1] = a[i-1];
+void merge(int *v, int *c, int i, int m, int f) {
+    int z, iv = i, ic = m + 1;
+
+    for (z = i; z <= f; z++){
+        c[z] = v[z];
     }
 
-    for (j = meio; j < dir; j++){
-        aux[dir + meio -j] = a[j+1];
-    }
+    z = i;
 
-    for (k = esq; k <= dir; k++){
-        if (aux[j] < aux[i]){
-            a[k] = aux[j--];
-        }else{
-            a[k] = aux[i++];
+    while (iv <= m && ic <= f) {
+       
+
+        if (c[iv] <= c[ic]){
+            v[z++] = c[iv++];
         }
+            
+        else {
+            v[z++] = c[ic++];
+        }  
+    }
+
+    while (iv <= m){
+        v[z++] = c[iv++];
+    }
+
+    while (ic <= f){
+        v[z++] = c[ic++];
     }
 }
 
-void mergeAlg(int a[], int esq, int dir) {
+void mergeAlg(int *v, int *c, int i, int f) {
+    if (i >= f) return;
 
-    if (esq < dir) {
-        int meio = (esq + dir) / 2;
-        mergeAlg(a, esq, meio);
-        mergeAlg(a, meio +1, dir);
-        merge(a, esq, meio, dir);
+    int m = (i + f) / 2;
+
+    mergeAlg(v, c, i, m);
+    mergeAlg(v, c, m + 1, f);
+
+   
+    if (v[m] <= v[m + 1]){
+        return;
     }
+
+    merge(v, c, i, m, f);
 }
 
-double mergeSort(int vetor[], int tam){
+double mergeSort(int vetor[], int tam) {
+    int *c = malloc(sizeof(int) * tam);
+        
     clock_t inicio = clock();
 
-    mergeAlg(vetor, 0, tam - 1);
+    mergeAlg(vetor, c,  0, tam - 1);
 
     double tempo = (double) (clock() - inicio) / CLOCKS_PER_SEC;
+    free(c);
 
+    return tempo;
+}
+
+void countingsort(int Array[], int n, int place) {
+   int i;
+   int* output = malloc(sizeof(int) * n);
+
+   int freq[10] = { 0 };
+
+   for (i = 0; i < n; i++){
+      freq[(Array[i] / place) % 10]++;
+   } 
+
+   for (i = 1; i < 10; i++){
+      freq[i] += freq[i - 1];
+   }
+
+   for (i = n - 1; i >= 0; i--) {
+      output[freq[(Array[i] / place) % 10] - 1] = Array[i];
+      freq[(Array[i] / place) % 10]--;
+   }
+
+   for (i = 0; i < n; i++){
+      Array[i] = output[i];
+   }
+
+   free(output);
+}
+
+double radixSort(int Array[], int tam){
+   clock_t inicio = clock();
+
+	int i = 0, place = 0;
+	int max = Array[0];
+
+	for (i = 1; i < tam; i++) {
+		if (max < Array[i])
+			max = Array[i];
+	}
+
+	for (place = 1; max / place > 0; place *= 10){
+      countingsort(Array, tam, place);
+   }
+
+   double tempo = (double) (clock() - inicio) / CLOCKS_PER_SEC;
+    
+   return tempo;
+}
+
+void heapify(int arr[], int n, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+  
+    if (left < n && arr[left] > arr[largest]){
+        largest = left;
+    }
+  
+    if (right < n && arr[right] > arr[largest]){
+        largest = right;
+    }
+    
+    if (largest != i) {
+        int temp = arr[i];
+        arr[i] = arr[largest];
+        arr[largest] = temp;
+      
+        heapify(arr, n, largest);
+    }
+}
+
+double heapSort(int arr[], int n) {
+    clock_t inicio = clock();
+    
+    for (int i = n / 2 - 1; i >= 0; i--){
+        heapify(arr, n, i);
+    }
+
+    for (int i = n - 1; i >= 0; i--) {
+        int temp = arr[0];
+        arr[0] = arr[i];
+        arr[i] = temp;
+        
+        heapify(arr, i, 0);
+    }
+    double tempo = (double) (clock() - inicio) / CLOCKS_PER_SEC;
+    
     return tempo;
 }
 
@@ -557,7 +671,7 @@ pTempo ordenar(int tam, algOrdenacao algoritmo){
 
 int menuTamanho(){
     system("cls");
-    //setlocale(LC_ALL,"Portuguese_Brazil.1252");
+    
     int option;
     printf("    ** Escolha o tamanho do arquivo **\n\n");
     printf("\t\t1- 500 Mil\n");
@@ -610,8 +724,9 @@ int menuAlgoritmo(pTAlgoritmo pTA){
     printf("\t\t   6- QuickSort Lomuto\n");
     printf("\t\t   7- MergeSort\n");
     printf("\t\t   8- RadixSort\n");
-    printf("\t\t   9- Todos\n");
-    printf("\t\t   0- Sair\n");
+    printf("\t\t   9- HeapSort\n");
+    printf("\t\t   0- Todos\n");
+    printf("\t\t   ESC- Sair\n");
 
     fflush(stdin);
     option = getch();
@@ -660,12 +775,17 @@ int menuAlgoritmo(pTAlgoritmo pTA){
             break;
         case '8':
             system("cls");
-            printf("Indisponivel");
-            /*printf("\t     ** RadixSort **");
+            printf("\t     ** RadixSort **");
             pTA->radixSort = ordenar(pTA->tam, radixSort);
-            tabDraw(pTA);*/
+            tabDraw(pTA);
             break;
         case '9':
+            system("cls");
+            printf("\t     ** HeapSort **");
+            pTA->heapSort = ordenar(pTA->tam, heapSort);
+            tabDraw(pTA);
+            break;
+        case '0':
             system("cls");
             printf("\t     ** BubbleSort **");
             pTA->bubbleSort = ordenar(pTA->tam, bubbleSort);
@@ -681,12 +801,12 @@ int menuAlgoritmo(pTAlgoritmo pTA){
             pTA->quickSortLomuto = ordenar(pTA->tam, quickSortLomuto);
             printf("\t     ** MergeSort **");
             pTA->mergeSort = ordenar(pTA->tam, mergeSort);
-            /*printf("\t     ** RadixSort **");
-            pTA->radixSort = ordenar(pTA->tam, radixSort);*/
+            printf("\t     ** RadixSort **");
+            pTA->radixSort = ordenar(pTA->tam, radixSort);
             system("cls");
             tabDraw(pTA);
             break;
-        case '0':
+        case 27: //?ESC
             system("cls");
             printf("Adeus!");
             return OUTLP;
