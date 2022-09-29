@@ -7,7 +7,7 @@
 #define Q500K 500000        //define quantidade 500 Mil
 #define Q750K 750000        //define quantidade 750 Mil
 #define Q1KK  1000000       //define quantidade 1 Milhao
-#define OUTLP 27             //define saida do loop em 0
+#define OUTLP 27            //define saida do loop em 0
 #define SCREEN_WIDTH 500    //define largura da tela
 #define SCREEN_HEIGHT 400   //define altura da tela
 
@@ -22,9 +22,6 @@
 
 /**
     *!                                          Anotacoes
-    *! Falta apenas o Radixsort
-    *! Falta o HeapSort (que esta pronto)
-    *! Testar se faz diferença ao executar todos ao mesmo tempo
 **/
 
 char tabela [lin][col]=   {
@@ -47,7 +44,7 @@ struct tempo{
     double aleatorio;
 };
 
-struct tAlgoritmo{
+struct tOrdenacao{
     int tam;
     struct tempo *bubbleSort;
     struct tempo *insertSort;
@@ -60,31 +57,54 @@ struct tAlgoritmo{
     struct tempo *heapSort;
 };
 
+struct tPesquisa{
+    int tam;
+    double *pesquisaSequencial;
+    double *pesquisaBinaria;
+    struct tempo *algoritmoOrdenacao;
+};
+
 typedef struct tempo  Tempo;
 typedef Tempo*        pTempo;
 
-typedef struct tAlgoritmo  TAlgoritmo;
-typedef TAlgoritmo*        pTAlgoritmo;
+typedef struct tOrdenacao  TOrdenacao;
+typedef TOrdenacao*        pTOrdenacao;
+
+typedef struct tPesquisa   TPesquisa;
+typedef TPesquisa*         pTPesquisa;
 
 typedef double (algOrdenacao(int v[], int tam));
+typedef double (algPesquisa(int v[], int tam, int key));
 
-pTAlgoritmo criarStruct(){
-    pTAlgoritmo pTA = malloc(sizeof(TAlgoritmo));
+pTOrdenacao criarStructOrdenacao(){
+    pTOrdenacao pTO = malloc(sizeof(TOrdenacao));
 
-    pTA->tam = 0;
-    pTA->bubbleSort = NULL;
-    pTA->insertSort = NULL;
-    pTA->selectSort = NULL;
-    pTA->shellSort  = NULL;
-    pTA->quickSortHoare  = NULL;
-    pTA->quickSortLomuto  = NULL;
-    pTA->mergeSort  = NULL;
-    pTA->radixSort  = NULL;
-    pTA->heapSort = NULL;
+    pTO->tam = 0;
+    pTO->bubbleSort = NULL;
+    pTO->insertSort = NULL;
+    pTO->selectSort = NULL;
+    pTO->shellSort  = NULL;
+    pTO->quickSortHoare  = NULL;
+    pTO->quickSortLomuto  = NULL;
+    pTO->mergeSort  = NULL;
+    pTO->radixSort  = NULL;
+    pTO->heapSort = NULL;
 
-    return pTA;
+    return pTO;
 }
 
+pTPesquisa criarStructPesquisa(){
+    pTPesquisa  pTP = malloc(sizeof(TPesquisa));
+
+    pTP->tam = 0;
+    pTP->pesquisaSequencial = NULL;
+    pTP->pesquisaBinaria = NULL;
+    pTP->algoritmoOrdenacao = NULL; 
+
+    return pTP;
+}
+//? ============================================================================SCREEN============================================================================
+#pragma Screen 
 void showCursor(int bShow){
     /******************************* showCursor ***********************************
         shows/hides the curser by TRUE/FALSE.
@@ -132,7 +152,7 @@ void gotoxy(int x, int y) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),c);
 }
 
-void tabDraw (pTAlgoritmo pTA){
+void tabDraw (pTOrdenacao pTO){
     system("cls");
 
     for (int c=0; c<col; c++){
@@ -146,93 +166,93 @@ void tabDraw (pTAlgoritmo pTA){
         }
     }
 
-    if(pTA->tam != Q1KK){
+    if(pTO->tam != Q1KK){
         gotoxy(CINV,1);
-        printf("%d MIL", (pTA->tam/1000));
+        printf("%d MIL", (pTO->tam/1000));
     }else{
         gotoxy(CINV,1);
         printf("1 MILHAO");
     }
 
-    if(pTA->bubbleSort != NULL){
+    if(pTO->bubbleSort != NULL){
         gotoxy(CORD,3);//linha 3 coluna ORDENADO
-        printf("%.4lf", pTA->bubbleSort->ordenado);
+        printf("%.4lf", pTO->bubbleSort->ordenado);
         gotoxy(CINV,3);//linha 3 coluna INVERTIDO
-        printf("%.4lf", pTA->bubbleSort->invertido);
+        printf("%.4lf", pTO->bubbleSort->invertido);
         gotoxy(CALT,3);//linha 3 coluna ALEATORIO
-        printf("%.4lf", pTA->bubbleSort->aleatorio);
+        printf("%.4lf", pTO->bubbleSort->aleatorio);
     }
 
-    if(pTA->insertSort != NULL){
+    if(pTO->insertSort != NULL){
         gotoxy(CORD,4);//linha 4 coluna ORDENADO
-        printf("%.4lf", pTA->insertSort->ordenado);
+        printf("%.4lf", pTO->insertSort->ordenado);
         gotoxy(CINV,4);//linha 4 coluna INVERTIDO
-        printf("%.4lf", pTA->insertSort->invertido);
+        printf("%.4lf", pTO->insertSort->invertido);
         gotoxy(CALT,4);//linha 4 coluna ALEATORIO
-        printf("%.4lf", pTA->insertSort->aleatorio);
+        printf("%.4lf", pTO->insertSort->aleatorio);
     }
 
-    if(pTA->selectSort != NULL){
+    if(pTO->selectSort != NULL){
         gotoxy(CORD,5);//linha 5 coluna ORDENADO
-        printf("%.4lf", pTA->selectSort->ordenado);
+        printf("%.4lf", pTO->selectSort->ordenado);
         gotoxy(CINV,5);//linha 5 coluna INVERTIDO
-        printf("%.4lf", pTA->selectSort->invertido);
+        printf("%.4lf", pTO->selectSort->invertido);
         gotoxy(CALT,5);//linha 5 coluna ALEATORIO
-        printf("%.4lf", pTA->selectSort->aleatorio);
+        printf("%.4lf", pTO->selectSort->aleatorio);
     }
 
-    if(pTA->shellSort != NULL){
+    if(pTO->shellSort != NULL){
         gotoxy(CORD+1,6);//linha 6 coluna ORDENADO
-        printf("%.4lf", pTA->shellSort->ordenado);
+        printf("%.4lf", pTO->shellSort->ordenado);
         gotoxy(CINV+1,6);//linha 6 coluna INVERTIDO
-        printf("%.4lf", pTA->shellSort->invertido);
+        printf("%.4lf", pTO->shellSort->invertido);
         gotoxy(CALT+1,6);//linha 6 coluna ALEATORIO
-        printf("%.4lf", pTA->shellSort->aleatorio);
+        printf("%.4lf", pTO->shellSort->aleatorio);
     }
 
-    if(pTA->quickSortHoare != NULL){
+    if(pTO->quickSortHoare != NULL){
         gotoxy(CORD+1,7);//linha 7 coluna ORDENADO
-        printf("%.4lf", pTA->quickSortHoare->ordenado);
+        printf("%.4lf", pTO->quickSortHoare->ordenado);
         gotoxy(CINV+1,7);//linha 7 coluna INVERTIDO
-        printf("%.4lf", pTA->quickSortHoare->invertido);
+        printf("%.4lf", pTO->quickSortHoare->invertido);
         gotoxy(CALT+1,7);//linha 7 coluna ALEATORIO
-        printf("%.4lf", pTA->quickSortHoare->aleatorio);
+        printf("%.4lf", pTO->quickSortHoare->aleatorio);
     }
 
-    if(pTA->quickSortLomuto != NULL){
+    if(pTO->quickSortLomuto != NULL){
         gotoxy(CORD,8);//linha 8 coluna ORDENADO
-        printf("%.4lf", pTA->quickSortLomuto->ordenado);
+        printf("%.4lf", pTO->quickSortLomuto->ordenado);
         gotoxy(CINV,8);//linha 8 coluna INVERTIDO
-        printf("%.4lf", pTA->quickSortLomuto->invertido);
+        printf("%.4lf", pTO->quickSortLomuto->invertido);
         gotoxy(CALT+1,8);//linha 8 coluna ALEATORIO
-        printf("%.4lf", pTA->quickSortLomuto->aleatorio);
+        printf("%.4lf", pTO->quickSortLomuto->aleatorio);
     }
 
-    if(pTA->mergeSort != NULL){
+    if(pTO->mergeSort != NULL){
         gotoxy(CORD+1,9);//linha 9 coluna ORDENADO
-        printf("%.4lf", pTA->mergeSort->ordenado);
+        printf("%.4lf", pTO->mergeSort->ordenado);
         gotoxy(CINV+1,9);//linha 9 coluna INVERTIDO
-        printf("%.4lf", pTA->mergeSort->invertido);
+        printf("%.4lf", pTO->mergeSort->invertido);
         gotoxy(CALT+1,9);//linha 9 coluna ALEATORIO
-        printf("%.4lf", pTA->mergeSort->aleatorio);
+        printf("%.4lf", pTO->mergeSort->aleatorio);
     }
 
-    if(pTA->radixSort != NULL){
+    if(pTO->radixSort != NULL){
         gotoxy(CORD+1,10);//linha 10 coluna ORDENADO
-        printf("%.4lf", pTA->radixSort->ordenado);
+        printf("%.4lf", pTO->radixSort->ordenado);
         gotoxy(CINV+1,10);//linha 10 coluna INVERTIDO
-        printf("%.4lf", pTA->radixSort->invertido);
+        printf("%.4lf", pTO->radixSort->invertido);
         gotoxy(CALT+1,10);//linha 10 coluna ALEATORIO
-        printf("%.4lf", pTA->radixSort->aleatorio);
+        printf("%.4lf", pTO->radixSort->aleatorio);
     }
 
-    if(pTA->heapSort != NULL){
+    if(pTO->heapSort != NULL){
         gotoxy(CORD+1,11);//linha 11 coluna ORDENADO
-        printf("%.4lf", pTA->heapSort->ordenado);
+        printf("%.4lf", pTO->heapSort->ordenado);
         gotoxy(CINV+1,11);//linha 11 coluna INVERTIDO
-        printf("%.4lf", pTA->heapSort->invertido);
+        printf("%.4lf", pTO->heapSort->invertido);
         gotoxy(CALT+1,11);//linha 11 coluna ALEATORIO
-        printf("%.4lf", pTA->heapSort->aleatorio);
+        printf("%.4lf", pTO->heapSort->aleatorio);
     }
 
     gotoxy(5,14);
@@ -241,8 +261,88 @@ void tabDraw (pTAlgoritmo pTA){
     getch();
 }
 
-//? =================================================================================ALGORITMOS=======================================================================
+void tabDrawPesquisa (pTPesquisa pTP){
+    system("cls");
 
+    for (int c=16; c<col; c++){
+        for (int l=0; l<lin; l++){
+            gotoxy(10+c,1+l);
+            switch (tabela [l][c]){
+                case '*': printf(" ");   break;
+                case '|': printf("%c", 179); break;
+                default: printf("%c", tabela [l][c]);
+            }
+        }
+    }
+
+    if(pTP->tam != Q1KK){
+        gotoxy(CINV,1);
+        printf("%d MIL", (pTP->tam/1000));
+    }else{
+        gotoxy(CINV,1);
+        printf("1 MILHAO");
+    }
+
+    gotoxy(6,3);
+    printf("PESQUISA SEQUENCIAL");
+    gotoxy(6,4);
+    printf("PESQUISA BINARIA");
+    gotoxy(6,5);
+    printf("ALGORITMO ORDENACAO");
+    gotoxy(6,6);
+    printf("SEQUENCIAL+ORDENACAO");
+    gotoxy(6,7);
+    printf("BINARIO+ORDENACAO");
+
+    if(pTP->pesquisaSequencial != NULL){
+        gotoxy(CORD,3);//linha 3 coluna ORDENADO
+        printf("%.5lf", *(pTP->pesquisaSequencial));
+        gotoxy(CINV,3);//linha 3 coluna INVERIDO
+        printf("%.5lf", *(pTP->pesquisaSequencial));
+        gotoxy(CALT,3);//linha 3 coluna ALEATORIO
+        printf("%.5lf", *(pTP->pesquisaSequencial));
+
+        gotoxy(CORD,6);//linha 6 coluna ORDENADO
+        printf("%.5lf", ((pTP->algoritmoOrdenacao->ordenado) + *(pTP->pesquisaSequencial)));
+        gotoxy(CINV,6);//linha 6 coluna INVERIDO
+        printf("%.5lf", ((pTP->algoritmoOrdenacao->invertido) + *(pTP->pesquisaSequencial)));
+        gotoxy(CALT,6);//linha 6 coluna ALEATORIO
+        printf("%.5lf", ((pTP->algoritmoOrdenacao->aleatorio) + *(pTP->pesquisaSequencial)));
+    }
+
+    if(pTP->pesquisaBinaria != NULL){
+        gotoxy(CORD,4);//linha 4 coluna ORDENADO
+        printf("%.5lf", *(pTP->pesquisaBinaria));
+        gotoxy(CINV,4);//linha 4 coluna INVERIDO
+        printf("%.5lf", *(pTP->pesquisaBinaria));
+        gotoxy(CALT,4);//linha 4 coluna ALEATORIO
+        printf("%.5lf", *(pTP->pesquisaBinaria));
+        
+        gotoxy(CORD,7);//linha 7 coluna ORDENADO
+        printf("%.5lf", ((pTP->algoritmoOrdenacao->ordenado) + *(pTP->pesquisaBinaria)));
+        gotoxy(CINV,7);//linha 7 coluna INVERIDO
+        printf("%.5lf", ((pTP->algoritmoOrdenacao->invertido) + *(pTP->pesquisaBinaria)));
+        gotoxy(CALT,7);//linha 7 coluna ALEATORIO
+        printf("%.5lf", ((pTP->algoritmoOrdenacao->aleatorio) + *(pTP->pesquisaBinaria)));
+    }
+
+    if(pTP->algoritmoOrdenacao != NULL){
+        gotoxy(CORD+1,5);//linha 5 coluna ORDENADO
+        printf("%.4lf", pTP->algoritmoOrdenacao->ordenado);
+        gotoxy(CINV+1,5);//linha 5 coluna ORDENADO
+        printf("%.4lf", pTP->algoritmoOrdenacao->invertido);
+        gotoxy(CALT+1,5);//linha 5 coluna ORDENADO
+        printf("%.4lf", pTP->algoritmoOrdenacao->aleatorio);
+    }
+
+    gotoxy(5,14);
+    printf("Aperte qualquer tecla para voltar ao menu!");
+    fflush(stdin);
+    getch();
+}
+#pragma Screen
+//? ============================================================================ALGORITMOS========================================================================
+#pragma Algoritmos 
 double bubbleSort(int vetor[], int tam){
     clock_t inicio = clock();
     for (int j = tam; j > 0; j--){
@@ -549,8 +649,57 @@ double heapSort(int arr[], int n) {
     return tempo;
 }
 
-//? =================================================================================ARQUIVOS=======================================================================
+int buscaSequencial(int vetor[], int tam, int key){
+    for (int t = 0; t < tam; t++){
+        if (vetor[t] == key){
+            return t;
+        }
+    }
 
+    return -1;
+}
+
+double pesquisaSequencial(int vetor[], int tam, int key){
+    clock_t inicio = clock();
+
+    buscaSequencial(vetor, tam, key);
+
+    double tempo = (double) (clock() - inicio) / CLOCKS_PER_SEC;
+    
+    return tempo;
+}
+
+int buscaBinaria(int vetor[], int ini, int fim, int key){
+
+    int mei = (ini + fim) / 2;
+    if((ini == fim) && !(key == vetor[mei])){
+        return -1;
+    }else{
+        if(key == vetor[mei]){
+            return mei;
+        }
+        else{
+            if(key > vetor[mei]){
+                return buscaBinaria(vetor, mei+1, fim, key);
+            }else{
+                return buscaBinaria(vetor, ini, mei-1, key);
+            }
+        }
+    }
+}
+
+double pesquisaBinaria(int vetor[], int tam, int key){
+    clock_t inicio = clock();
+
+    buscaBinaria(vetor, 0, tam, key);
+
+    double tempo = (double) (clock() - inicio) / CLOCKS_PER_SEC;
+    
+    return tempo;
+}
+#pragma Algoritmos
+//? ============================================================================ARQUIVOS==========================================================================
+#pragma Arquivos 
 int randomInteger (int high){
     double d;
     d = (double) rand () / ((double) RAND_MAX + 1);
@@ -626,9 +775,9 @@ void lerArquivo (FILE *file, int vetor[]){
         fscanf (file, "%d", &vetor[i]);
     }
 }
-
-//? ============================================================================ORDENAÇÃO============================================================================
-
+#pragma endregion
+//? ============================================================================ORDENAÇÃO=========================================================================
+#pragma Ordenação 
 pTempo ordenar(int tam, algOrdenacao algoritmo){
     pTempo pt = malloc(sizeof(Tempo));
 
@@ -668,9 +817,51 @@ pTempo ordenar(int tam, algOrdenacao algoritmo){
 
     return pt;
 }
+#pragma Ordenação
+//? ============================================================================PESQUISA==========================================================================
+#pragma Pesquisa 
+int achaMax(int vetor[], int tam){
+    int maior = 0;
 
-//? ============================================================================MENUS============================================================================
+    for (int i = 0; i < tam; i++){
+        if(vetor[i]>maior){
+            maior = vetor[i];
+        }
+    }
+    return maior;
+    
+}
 
+double* pesquisar(int tam, algPesquisa algoritmo, algOrdenacao algOrd, pTPesquisa pTP){
+    pTempo ptOrd = ordenar(tam, algOrd);
+    //pt = 
+
+    int *vetor = malloc(tam * sizeof(int));
+    double *tPesquisa = malloc(sizeof(double));
+
+    FILE *ordenado;
+    char nomeOrdenado[255];
+
+    sprintf(nomeOrdenado, "Ordenado%05d.txt", tam);
+
+    ordenado = fopen(nomeOrdenado, "r");
+    lerArquivo(ordenado, vetor);
+
+    int max = achaMax(vetor, tam);
+
+    printf("\n\tPesquisando no Arquivo...");
+    
+    *tPesquisa = algoritmo(vetor, tam, max);
+
+    pTP->algoritmoOrdenacao = ptOrd;
+    
+    free(vetor);
+
+    return tPesquisa;
+}
+#pragma Pesquisa
+//? ============================================================================MENUS=============================================================================
+#pragma Menus 
 int menuTamanho(){
     system("cls");
     
@@ -713,7 +904,39 @@ int menuTamanho(){
     return option;
 }
 
-int menuAlgoritmo(pTAlgoritmo pTA){
+int menuEscolha(){
+    system("cls");
+
+    printf("    ** Escolha se oque quer realizar **\n\n");
+    printf("\t\t1- Ordenacao\n");
+    printf("\t\t2- Pesquisa\n");
+    printf("\t\t3- Sair\n");
+    
+    fflush(stdin);
+    int option = getch();
+    
+    switch (option){
+        case '1':
+            option = 1;
+            break;
+        case '2':
+            option = 2;
+            break;
+        case '3':
+            system("cls");
+            printf("Adeus!");
+            option = 0;
+
+    default:
+        system("cls");
+        printf("Erro: Opcao nao encontrada");
+        break;
+    }
+
+    return option;
+}
+
+int menuOrdenacao(pTOrdenacao pTO){
     int option;
 
     system("cls");
@@ -736,80 +959,80 @@ int menuAlgoritmo(pTAlgoritmo pTA){
         case '1':
             system("cls");
             printf("\t     ** BubbleSort **");
-            pTA->bubbleSort = ordenar(pTA->tam, bubbleSort);
-            tabDraw(pTA);
+            pTO->bubbleSort = ordenar(pTO->tam, bubbleSort);
+            tabDraw(pTO);
             break;
         case '2':
             system("cls");
             printf("\t     ** InsertSort **");
-            pTA->insertSort = ordenar(pTA->tam, insertSort);
-            tabDraw(pTA);
+            pTO->insertSort = ordenar(pTO->tam, insertSort);
+            tabDraw(pTO);
             break;
         case '3':
             system("cls");
             printf("\t     ** SelectSort **");
-            pTA->selectSort = ordenar(pTA->tam, selectionSort);
-            tabDraw(pTA);
+            pTO->selectSort = ordenar(pTO->tam, selectionSort);
+            tabDraw(pTO);
             break;
         case '4':
             system("cls");
             printf("\t     ** ShellSort **");
-            pTA->shellSort = ordenar(pTA->tam, shellSort);
-            tabDraw(pTA);
+            pTO->shellSort = ordenar(pTO->tam, shellSort);
+            tabDraw(pTO);
             break;
         case '5':
             system("cls");
             printf("\t     ** QuickSort Hoare **");
-            pTA->quickSortHoare = ordenar(pTA->tam, quickSortHoare);
-            tabDraw(pTA);
+            pTO->quickSortHoare = ordenar(pTO->tam, quickSortHoare);
+            tabDraw(pTO);
             break;
         case '6':
             system("cls");
             printf("\t     ** QuickSort Lomuto **");
-            pTA->quickSortLomuto = ordenar(pTA->tam, quickSortLomuto);
-            tabDraw(pTA);
+            pTO->quickSortLomuto = ordenar(pTO->tam, quickSortLomuto);
+            tabDraw(pTO);
             break;
         case '7':
             system("cls");
             printf("\t     ** MergeSort **");
-            pTA->mergeSort = ordenar(pTA->tam, mergeSort);
-            tabDraw(pTA);
+            pTO->mergeSort = ordenar(pTO->tam, mergeSort);
+            tabDraw(pTO);
             break;
         case '8':
             system("cls");
             printf("\t     ** RadixSort **");
-            pTA->radixSort = ordenar(pTA->tam, radixSort);
-            tabDraw(pTA);
+            pTO->radixSort = ordenar(pTO->tam, radixSort);
+            tabDraw(pTO);
             break;
         case '9':
             system("cls");
             printf("\t     ** HeapSort **");
-            pTA->heapSort = ordenar(pTA->tam, heapSort);
-            tabDraw(pTA);
+            pTO->heapSort = ordenar(pTO->tam, heapSort);
+            tabDraw(pTO);
             break;
         case '0':
             system("cls");
             printf("\t     ** BubbleSort **");
-            pTA->bubbleSort = ordenar(pTA->tam, bubbleSort);
+            pTO->bubbleSort = ordenar(pTO->tam, bubbleSort);
             printf("\n\t     ** InsertSort **");
-            pTA->insertSort = ordenar(pTA->tam, insertSort);
+            pTO->insertSort = ordenar(pTO->tam, insertSort);
             printf("\n\t     ** SelectSort **");
-            pTA->selectSort = ordenar(pTA->tam, selectionSort);
+            pTO->selectSort = ordenar(pTO->tam, selectionSort);
             printf("\n\t     ** ShellSort **");
-            pTA->shellSort = ordenar(pTA->tam, shellSort);
+            pTO->shellSort = ordenar(pTO->tam, shellSort);
             printf("\n\t     ** QuickSort Hoare **");
-            pTA->quickSortHoare = ordenar(pTA->tam, quickSortHoare);
+            pTO->quickSortHoare = ordenar(pTO->tam, quickSortHoare);
             printf("\n\t     ** QuickSort Lomuto **");
-            pTA->quickSortLomuto = ordenar(pTA->tam, quickSortLomuto);
+            pTO->quickSortLomuto = ordenar(pTO->tam, quickSortLomuto);
             printf("\n\t     ** MergeSort **");
-            pTA->mergeSort = ordenar(pTA->tam, mergeSort);
+            pTO->mergeSort = ordenar(pTO->tam, mergeSort);
             printf("\n\t     ** RadixSort **");
-            pTA->radixSort = ordenar(pTA->tam, radixSort);
+            pTO->radixSort = ordenar(pTO->tam, radixSort);
             printf("\n\t     ** HeapSort **");
-            pTA->heapSort = ordenar(pTA->tam, heapSort);
-            tabDraw(pTA);
+            pTO->heapSort = ordenar(pTO->tam, heapSort);
+            tabDraw(pTO);
             system("cls");
-            tabDraw(pTA);
+            tabDraw(pTO);
             break;
         case 27: //?ESC
             system("cls");
@@ -826,17 +1049,74 @@ int menuAlgoritmo(pTAlgoritmo pTA){
     return option;
 }
 
-void menuInicial(pTAlgoritmo pTA){
-    pTA->tam = menuTamanho();
-    if(pTA->tam == 0){
+int menuPesquisa(pTPesquisa pTP){
+    int option;
+
+    system("cls");
+    printf("\t** Escolha o algoritmo de pesquisa **\n\n");
+    printf("\t\t   1- Pesquisa Sequencial\n");
+    printf("\t\t   2- Pesquisa Binaria\n");
+    printf("\t\t   3- Todos\n");
+    printf("\t\t   ESC- Sair\n");
+
+    fflush(stdin);
+    option = getch();
+    switch (option){
+    case '1':
         system("cls");
-    }else{
-        while(menuAlgoritmo(pTA) != OUTLP);
+        printf("\t     ** Pesquisa Sequencial **");
+        pTP->pesquisaSequencial = pesquisar(pTP->tam, pesquisaSequencial, quickSortHoare, pTP);
+        tabDrawPesquisa(pTP);
+        break;
+    case '2':
+        system("cls");
+        printf("\t     ** Pesquisa Binaria **");
+        pTP->pesquisaBinaria = pesquisar(pTP->tam, pesquisaBinaria, quickSortHoare, pTP);
+        tabDrawPesquisa(pTP);
+        break;
+    case '3':
+        system("cls");
+        printf("\t     ** Pesquisa Sequencial **");
+        pTP->pesquisaSequencial = pesquisar(pTP->tam, pesquisaSequencial, quickSortHoare, pTP);
+        printf("\n\t     ** Pesquisa Binaria **");
+        pTP->pesquisaBinaria = pesquisar(pTP->tam, pesquisaBinaria, quickSortHoare, pTP);
+        tabDrawPesquisa(pTP);
+        break;
+    case 27:
+        system("cls");
+        printf("Adeus");
+        return OUTLP;
+        break;    
+    default:
+        system("cls");
+        printf("Erro opcao nao identificada");
+        printf("\n\nAperte qualquer tecla para voltar ao menu!");
+        getch();
+        break;
     }
+    return option;
 }
 
+void menuInicial(pTOrdenacao pTO, pTPesquisa pTP){
+    pTO->tam = menuTamanho();
+    pTP->tam = pTO->tam;
+    if(pTO->tam !=0){
+        int escolha = menuEscolha();
+        if(escolha==1){
+            while(menuOrdenacao(pTO) != OUTLP);
+        }else if(escolha==2){
+            while(menuPesquisa(pTP) != OUTLP);
+        }else{
+            system("cls");
+        }
+    }
+}
+#pragma Menus
+//? ============================================================================MAIN==============================================================================
+
 int main(){
-    pTAlgoritmo pTA = criarStruct();
+    pTOrdenacao pTO = criarStructOrdenacao();
+    pTPesquisa  pTP = criarStructPesquisa();
     setScreenSize(800,600);
     showCursor(0);
 
@@ -844,7 +1124,8 @@ int main(){
     gerarArquivosAleatorio();
     system("cls");
     system("color 0F");
-    menuInicial(pTA);
+    menuInicial(pTO, pTP);
 
-    free(pTA);
+    free(pTO);
+    free(pTP);
 }
