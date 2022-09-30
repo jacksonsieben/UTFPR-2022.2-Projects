@@ -245,7 +245,7 @@ int main(void){
     glutInitWindowSize(800,800);
     glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH)-800)/2,
                            (glutGet(GLUT_SCREEN_HEIGHT)-740)/2);
-	glutCreateWindow("Tarefa - Interação com Teclado");
+	glutCreateWindow("Tarefa - Interaï¿½ï¿½o com Teclado");
     glutDisplayFunc(desenhaObjeto);
     glutKeyboardFunc(teclas);
     glutSpecialFunc(setasDirecionais);

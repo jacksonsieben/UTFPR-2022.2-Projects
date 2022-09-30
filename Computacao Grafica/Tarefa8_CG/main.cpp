@@ -1,87 +1,139 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
 
-GLfloat r = 0, g = 0, b = 0;              // variáveis para controle de cor (inicia em preto)
-int submenucor;                           //variável para o submenu
+GLfloat r = 0, g = 0, b = 0;
+GLfloat Ax = -2, Ay = -2;
+GLfloat Bx = -2, By = 2;
+GLfloat Cx = 2, Cy = 2;
+GLfloat Dx = 2, Dy = -2;
+
+int submenucor, subMenuForma;                           
 
 void quadrado(){
-    glBegin(GL_QUADS);                    //lBegin e glEnd delimitam os vértices que definem uma primitiva ou um grupo de primitivas semelhantes (definida como parâmetro).
-        glVertex2f(-2, -2);               //adiciona um ponto na coordenada x, y que será usado para completar nosso quadrado
-        glVertex2f(-2, 2);                //adiciona um ponto na coordenada x, y que será usado para completar nosso quadrado
-        glVertex2f(2, 2);                 //adiciona um ponto na coordenada x, y que será usado para completar nosso quadrado
-        glVertex2f(2, -2);                //adiciona um ponto na coordenada x, y que será usado para completar nosso quadrado
+    glBegin(GL_QUADS);                    
+        /*glVertex2f(-2, -2);               
+        glVertex2f(-2, 2);                
+        glVertex2f(2, 2);                 
+        glVertex2f(2, -2);*/    
+        glVertex2f(Ax, Ay);               
+        glVertex2f(Bx, By);                
+        glVertex2f(Cx, Cy);                  
+        glVertex2f(Dx, Dy);            
     glEnd();
 }
 
-void desenhaObjeto(void){                 //função de desenho
-    glClear(GL_COLOR_BUFFER_BIT);         //buffer padrão; limpa a tela toda vez que a função é chamada
-	glMatrixMode(GL_PROJECTION);          //projeção dos pontos definidos no plano cartesiano
-    glLoadIdentity(); 				      //carrega a projeção
-    gluOrtho2D(-30,30,-30,30);            //define o tamanho do plano cartesiano
-	glMatrixMode(GL_MODELVIEW);           //projeção do tipo modelo
-    glLoadIdentity();                     //carrega essa identidade de projeção de modelo
+void desenhaObjeto(void){                 
+    glClear(GL_COLOR_BUFFER_BIT);         
+	glMatrixMode(GL_PROJECTION);          
+    glLoadIdentity(); 				      
+    gluOrtho2D(-30,30,-30,30);            
+	glMatrixMode(GL_MODELVIEW);           
+    glLoadIdentity();                     
 
-    glColor3f(r, g, b);                   //adiciona cor ao quadrado (dependendo do valor das variáveis r, g e b)
-    glPushMatrix();                       //insere a matriz de transformação corrente na pilha
-        quadrado();                       //chama a função que desenha um quadrado
-    glPopMatrix();                        //retira a matriz do topo da pilha e torna esta última a matriz de transformação corrente
+    glColor3f(r, g, b);                   
+    glPushMatrix();                       
+        quadrado();                       
+    glPopMatrix();                        
 
- 	glutSwapBuffers();                    //Executa uma troca de buffer na camada em uso para a janela atual (para que consiga trabalhar com dois buffers)
+ 	glutSwapBuffers();                    
 }
 
-void escolheCor(int opcao){                //verifica a opção escolhida
+void escolheCor(int opcao){                
     switch(opcao){
-        case 0:                           //caso  o valor de opção for 0 pinta de vermelho
-            r = 1;                        //atribui valores as variáveis de cor
-            g = 0;                        //atribui valores as variáveis de cor
-            b = 0;                        //atribui valores as variáveis de cor
+        case 0:                           
+            r = 1;                        
+            g = 0;                        
+            b = 0;                        
         break;
-        case 1:                           //caso  o valor de opção for 1 pinta de verde
-            r = 0;                        //atribui valores as variáveis de cor
-            g = 1;                        //atribui valores as variáveis de cor
-            b = 0;                        //atribui valores as variáveis de cor
+        case 1:                           
+            r = 0;                        
+            g = 1;                        
+            b = 0;                        
         break;
-        case 2:                           //caso  o valor de opção for 2 pinta de azul
-            r = 0;                        //atribui valores as variáveis de cor
-            g = 0;                        //atribui valores as variáveis de cor
-            b = 1;                        //atribui valores as variáveis de cor
+        case 2:                           
+            r = 0;                        
+            g = 0;                        
+            b = 1;                        
         break;
     }
-    glutPostRedisplay();                  //chama a função desenha toda vez que for necessária
+    glutPostRedisplay();                  
+}
+
+void escolheForma(int opcao){ 
+    switch(opcao){
+        case 0:     //Triangulo                     
+            Ax = -2;
+            Ay = -2;
+            Bx =  0;
+            By =  2;
+            Cx =  0;
+            Cy =  2;
+            Dx =  2;
+            Dy = -2;                    
+        break;
+        case 1:     //Losango
+            Ax = -2;
+            Ay =  0;
+            Bx =  0;
+            By =  2;
+            Cx =  2;
+            Cy =  0;
+            Dx =  0;
+            Dy = -2;                    
+        break;
+        case 2:     //Quadrado                  
+            Ax = -2;
+            Ay = -2;
+            Bx = -2;
+            By =  2;
+            Cx =  2;
+            Cy =  2;
+            Dx =  2;
+            Dy = -2;                       
+        break;
+    }
+    glutPostRedisplay();    
 }
 
 void menuCor(){
-    submenucor = glutCreateMenu(escolheCor);               //cria um novo menu pop-up
-    glutAddMenuEntry("Vermelho", 0);                       //adiciona uma entrada de menu na parte inferior do menu atual
-    glutAddMenuEntry("Verde", 1);                          //adiciona uma entrada de menu na parte inferior do menu atual
-    glutAddMenuEntry("Azul", 2);                           //adiciona uma entrada de menu na parte inferior do menu atual
+    submenucor = glutCreateMenu(escolheCor);               
+    glutAddMenuEntry("Vermelho", 0);                       
+    glutAddMenuEntry("Verde", 1);                          
+    glutAddMenuEntry("Azul", 2);                           
 }
 
+void menuForma(){
+    subMenuForma = glutCreateMenu(escolheForma);               
+    glutAddMenuEntry("Triangulo", 0);                       
+    glutAddMenuEntry("Losango", 1);                          
+    glutAddMenuEntry("Quadrado", 2);                           
+}
 
 void criaMenu(){
-    menuCor();                                             //Chama a função que cria o submenu cor
-    glutCreateMenu(0);                                     //cria um novo menu pop-up (no caso, o principal, onde estarão adicionados os outros submenus)
-    glutAddSubMenu("Escolha a Cor", submenucor);           //adiciona um gatilho de submenu à parte inferior do menu atual
-    glutAttachMenu(GLUT_LEFT_BUTTON);                      //anexa um botão do mouse para a janela
-
+    menuCor();  
+    menuForma();                                 
+    glutCreateMenu(0);                                     
+    glutAddSubMenu("Escolha a Cor", submenucor);  
+    glutAddSubMenu("Escolha a Forma", subMenuForma);        
+    glutAttachMenu(GLUT_LEFT_BUTTON);                        
 }
 
-void gerenciaMouse(int botao, int estado, int x, int y){      //Parâmetros de entrada da função: (int button, int state, int x, int y).  Os parâmetros x e y indicam a localização do mouse no momento que o evento ocorreu.
-    if(botao == GLUT_LEFT_BUTTON)                             //se o botão do mouse clicado for o esquerdo
-        if(estado == GLUT_DOWN){                              //O parâmetro state pode ser GLUT_UP ou GLUT_DOWN.
-            criaMenu();                                       //chama a função que cria o menu
+void gerenciaMouse(int botao, int estado, int x, int y){      
+    if(botao == GLUT_LEFT_BUTTON)                             
+        if(estado == GLUT_DOWN){                              
+            criaMenu();                             
         }
-    glutPostRedisplay();                                      //chama a função desenha toda vez que for necessária
+    glutPostRedisplay();                                      
 }
 
 int main(void){
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);            //double buffer, pois single ficaria piscando, uma vez que ele tem que desenhar e redesenhar | sistema de cores RGB
-    glutInitWindowSize(800,600);                            //define o tamanho da janela
-    glutInitWindowPosition(320,150);                        //medidas usadas para posicionar a janela no meio da tela - isso depende da resolução do monitor
-	glutCreateWindow("Função Menu - Interação");            //permite a criação de uma janela
-    glutDisplayFunc(desenhaObjeto);                         //função de callback - chama a função desenhaObjetos
-    glutMouseFunc(gerenciaMouse);                           //Estabelece a função callback que é chamada pela GLUT cada vez que ocorre um evento de mouse.
-    glClearColor(1,1,1,0);                                  //informa a cor de fundo da tela (branco)
-    glutMainLoop();                                         //loop infinito - escuta as informações do sistema até encerrar a aplicação
-    return 0;                                               //retorna zero
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);            
+    glutInitWindowSize(800,600);                            
+    glutInitWindowPosition(320,150);                        
+	glutCreateWindow("Função Menu - Interação");            
+    glutDisplayFunc(desenhaObjeto);                         
+    glutMouseFunc(gerenciaMouse);                           
+    glClearColor(1,1,1,0);                                  
+    glutMainLoop();                                         
+    return 0;                                               
 }
