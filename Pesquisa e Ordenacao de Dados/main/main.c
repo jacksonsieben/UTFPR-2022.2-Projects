@@ -104,7 +104,7 @@ pTPesquisa criarStructPesquisa(){
     return pTP;
 }
 //? ============================================================================SCREEN============================================================================
-#pragma Screen 
+#pragma region Screen 
 void showCursor(int bShow){
     /******************************* showCursor ***********************************
         shows/hides the curser by TRUE/FALSE.
@@ -340,9 +340,9 @@ void tabDrawPesquisa (pTPesquisa pTP){
     fflush(stdin);
     getch();
 }
-#pragma Screen
+#pragma endregion
 //? ============================================================================ALGORITMOS========================================================================
-#pragma Algoritmos 
+#pragma region Algoritmos 
 double bubbleSort(int vetor[], int tam){
     clock_t inicio = clock();
     for (int j = tam; j > 0; j--){
@@ -697,9 +697,9 @@ double pesquisaBinaria(int vetor[], int tam, int key){
     
     return tempo;
 }
-#pragma Algoritmos
+#pragma endregion Algoritmos
 //? ============================================================================ARQUIVOS==========================================================================
-#pragma Arquivos 
+#pragma region Arquivos 
 int randomInteger (int high){
     double d;
     d = (double) rand () / ((double) RAND_MAX + 1);
@@ -777,7 +777,7 @@ void lerArquivo (FILE *file, int vetor[]){
 }
 #pragma endregion
 //? ============================================================================ORDENAÇÃO=========================================================================
-#pragma Ordenação 
+#pragma region Ordenação 
 pTempo ordenar(int tam, algOrdenacao algoritmo){
     pTempo pt = malloc(sizeof(Tempo));
 
@@ -817,9 +817,9 @@ pTempo ordenar(int tam, algOrdenacao algoritmo){
 
     return pt;
 }
-#pragma Ordenação
+#pragma endregion
 //? ============================================================================PESQUISA==========================================================================
-#pragma Pesquisa 
+#pragma region Pesquisa
 int achaMax(int vetor[], int tam){
     int maior = 0;
 
@@ -859,9 +859,9 @@ double* pesquisar(int tam, algPesquisa algoritmo, algOrdenacao algOrd, pTPesquis
 
     return tPesquisa;
 }
-#pragma Pesquisa
+#pragma endregion
 //? ============================================================================MENUS=============================================================================
-#pragma Menus 
+#pragma region Menus 
 int menuTamanho(){
     system("cls");
     
@@ -1111,7 +1111,7 @@ void menuInicial(pTOrdenacao pTO, pTPesquisa pTP){
         }
     }
 }
-#pragma Menus
+#pragma endregion Menus
 //? ============================================================================MAIN==============================================================================
 
 int main(){
