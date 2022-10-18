@@ -296,43 +296,43 @@ void tabDrawPesquisa (pTPesquisa pTP){
 
     if(pTP->pesquisaSequencial != NULL){
         gotoxy(CORD,3);//linha 3 coluna ORDENADO
-        printf("%.5lf", *(pTP->pesquisaSequencial));
+        printf("%.6lf", *(pTP->pesquisaSequencial));
         gotoxy(CINV,3);//linha 3 coluna INVERIDO
-        printf("%.5lf", *(pTP->pesquisaSequencial));
+        printf("%.6lf", *(pTP->pesquisaSequencial));
         gotoxy(CALT,3);//linha 3 coluna ALEATORIO
-        printf("%.5lf", *(pTP->pesquisaSequencial));
+        printf("%.6lf", *(pTP->pesquisaSequencial));
 
         gotoxy(CORD,6);//linha 6 coluna ORDENADO
-        printf("%.5lf", ((pTP->algoritmoOrdenacao->ordenado) + *(pTP->pesquisaSequencial)));
+        printf("%.6lf", ((pTP->algoritmoOrdenacao->ordenado) + *(pTP->pesquisaSequencial)));
         gotoxy(CINV,6);//linha 6 coluna INVERIDO
-        printf("%.5lf", ((pTP->algoritmoOrdenacao->invertido) + *(pTP->pesquisaSequencial)));
+        printf("%.6lf", ((pTP->algoritmoOrdenacao->invertido) + *(pTP->pesquisaSequencial)));
         gotoxy(CALT,6);//linha 6 coluna ALEATORIO
-        printf("%.5lf", ((pTP->algoritmoOrdenacao->aleatorio) + *(pTP->pesquisaSequencial)));
+        printf("%.6lf", ((pTP->algoritmoOrdenacao->aleatorio) + *(pTP->pesquisaSequencial)));
     }
 
     if(pTP->pesquisaBinaria != NULL){
         gotoxy(CORD,4);//linha 4 coluna ORDENADO
-        printf("%.5lf", *(pTP->pesquisaBinaria));
+        printf("%.6lf", *(pTP->pesquisaBinaria));
         gotoxy(CINV,4);//linha 4 coluna INVERIDO
-        printf("%.5lf", *(pTP->pesquisaBinaria));
+        printf("%.6lf", *(pTP->pesquisaBinaria));
         gotoxy(CALT,4);//linha 4 coluna ALEATORIO
-        printf("%.5lf", *(pTP->pesquisaBinaria));
+        printf("%.6lf", *(pTP->pesquisaBinaria));
         
         gotoxy(CORD,7);//linha 7 coluna ORDENADO
-        printf("%.5lf", ((pTP->algoritmoOrdenacao->ordenado) + *(pTP->pesquisaBinaria)));
+        printf("%.6lf", ((pTP->algoritmoOrdenacao->ordenado) + *(pTP->pesquisaBinaria)));
         gotoxy(CINV,7);//linha 7 coluna INVERIDO
-        printf("%.5lf", ((pTP->algoritmoOrdenacao->invertido) + *(pTP->pesquisaBinaria)));
+        printf("%.6lf", ((pTP->algoritmoOrdenacao->invertido) + *(pTP->pesquisaBinaria)));
         gotoxy(CALT,7);//linha 7 coluna ALEATORIO
-        printf("%.5lf", ((pTP->algoritmoOrdenacao->aleatorio) + *(pTP->pesquisaBinaria)));
+        printf("%.6lf", ((pTP->algoritmoOrdenacao->aleatorio) + *(pTP->pesquisaBinaria)));
     }
 
     if(pTP->algoritmoOrdenacao != NULL){
-        gotoxy(CORD+1,5);//linha 5 coluna ORDENADO
-        printf("%.4lf", pTP->algoritmoOrdenacao->ordenado);
-        gotoxy(CINV+1,5);//linha 5 coluna ORDENADO
-        printf("%.4lf", pTP->algoritmoOrdenacao->invertido);
-        gotoxy(CALT+1,5);//linha 5 coluna ORDENADO
-        printf("%.4lf", pTP->algoritmoOrdenacao->aleatorio);
+        gotoxy(CORD,5);//linha 5 coluna ORDENADO
+        printf("%.6lf", pTP->algoritmoOrdenacao->ordenado);
+        gotoxy(CINV,5);//linha 5 coluna ORDENADO
+        printf("%.6lf", pTP->algoritmoOrdenacao->invertido);
+        gotoxy(CALT,5);//linha 5 coluna ORDENADO
+        printf("%.6lf", pTP->algoritmoOrdenacao->aleatorio);
     }
 
     gotoxy(5,14);
