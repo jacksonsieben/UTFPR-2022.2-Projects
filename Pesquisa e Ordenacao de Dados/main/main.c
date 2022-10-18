@@ -829,12 +829,10 @@ int achaMax(int vetor[], int tam){
         }
     }
     return maior;
-    
 }
 
 double* pesquisar(int tam, algPesquisa algoritmo, algOrdenacao algOrd, pTPesquisa pTP){
     pTempo ptOrd = ordenar(tam, algOrd);
-    //pt = 
 
     int *vetor = malloc(tam * sizeof(int));
     double *tPesquisa = malloc(sizeof(double));
