@@ -24,6 +24,17 @@ double pesquisaSequencial(int vetor[], int tam, int key){
     return tempo;
 }
 
+int achaMax(int vetor[], int tam){
+    int maior = 0;
+
+    for (int i = 0; i < tam; i++){
+        if(vetor[i]>maior){
+            maior = vetor[i];
+        }
+    }
+    return maior;
+}
+
 int main(){
     int *vetor = (int *) malloc(TAM * sizeof(int));
 
@@ -31,7 +42,10 @@ int main(){
         vetor[i] = i;
     }
 
-    double tempo = pesquisaSequencial(vetor, TAM, 499999);
+    int max = achaMax(vetor, TAM);
 
-    printf("Tempo decorrido %.4f", tempo);
+    double tempo = pesquisaSequencial(vetor, TAM, max);
+
+    printf("Tempo decorrido %lf", tempo);
+    getch();
 }

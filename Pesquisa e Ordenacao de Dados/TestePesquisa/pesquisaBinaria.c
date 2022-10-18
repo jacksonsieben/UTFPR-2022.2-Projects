@@ -34,6 +34,16 @@ double pesquisaBinaria(int vetor[], int tam, int key){
     
     return tempo;
 }
+int achaMax(int vetor[], int tam){
+    int maior = 0;
+
+    for (int i = 0; i < tam; i++){
+        if(vetor[i]>maior){
+            maior = vetor[i];
+        }
+    }
+    return maior;
+}
 
 int main(){
     int *vetor = (int *) malloc(TAM * sizeof(int));
@@ -41,8 +51,12 @@ int main(){
     for(int cont= TAM, i=0; cont > 0; cont--, i++){
         vetor[i] = i;
     }
+    int max = achaMax(vetor, TAM);
 
-    int i = buscaBinaria(vetor, 0, TAM, 250);
+    printf("Valor Max %d\n", max);
 
-    printf("Encontrado o valor na posicao %d", i);
+    double tempo = pesquisaBinaria(vetor, TAM, max);
+
+    printf("tempo %lf", tempo);
+    getch();
 }
