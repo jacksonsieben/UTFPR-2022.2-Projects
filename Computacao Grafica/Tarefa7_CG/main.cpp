@@ -10,6 +10,7 @@ int Dx = 350, Dy = 300;
 
 int ax, ay, bx, by, cx, cy, dx, dy;
 
+
 void ponto(){
     glPointSize(10);
     glBegin(GL_POINTS);
@@ -39,6 +40,21 @@ void pontos(){
         glVertex2f(Cx, Cy);
         glColor3f(0,0,1);
         glVertex2f(Dx, Dy);
+    glEnd();
+}
+
+
+void hexagono(){
+    glColor3f(0,1,0);
+
+    glBegin(GL_POLYGON);
+        glVertex2f(6,8);
+        glVertex2f(8,8);
+        glVertex2f(10,6);
+        glColor3f(1,0,0);
+        glVertex2f(8,4);
+        glVertex2f(6,4);
+        glVertex2f(4,6);
     glEnd();
 }
 

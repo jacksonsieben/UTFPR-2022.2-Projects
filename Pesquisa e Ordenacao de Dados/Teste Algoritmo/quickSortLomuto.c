@@ -4,6 +4,8 @@
 
 #define TAM 500000
 
+//! https://stackoverflow.com/questions/55399168/how-do-i-fix-my-quicksort-algorithm-for-larger-values-of-n-and-when-the-arra
+
 int partitionLomuto(int arr[], int low, int high){
     int pivot = arr[high];
     int i = low - 1;

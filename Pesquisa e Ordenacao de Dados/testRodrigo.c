@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
+struct T
+
 struct TPessoa{
     int idade;
     float altura;
